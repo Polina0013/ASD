@@ -1,11 +1,10 @@
 // Copyright 2024 Marina Usova
 
-#include <iostream>
-
-//#define EASY_EXAMPLE
-#define TVECTOR
+#define EASY_EXAMPLE
 
 #ifdef EASY_EXAMPLE
+
+#include <iostream>
 #include <iomanip>
 #include "../lib_easy_example/easy_example.h"
 
@@ -40,37 +39,3 @@ int main() {
 }
 
 #endif  // EASY_EXAMPLE
-
-
-#ifdef TVECTOR
-#include "..\lib_tvector\tvector.h"
-
-int start_menu() {
-    std::cout << "Choose a work option:" << std::endl;
-    std::cout << "1. Simple matrices" << std::endl;
-    std::cout << "2. Triangular matrices" << std::endl;
-    int choice;
-    std::cin >> choice;
-    return choice;
-}
-
-int main() {
-    while (1) {
-        system("cls");
-
-        int choice = start_menu();
-        switch (choice)
-        {
-        case (1):
-
-            break;
-        case (2):
-            break;
-        default:
-            break;
-        }
-    }
-
-}
-
-#endif // TVECTOR
