@@ -28,6 +28,21 @@ public:
     Matrix<T> sub(const Matrix<T>&);
     Matrix<T> mult(const Matrix<T>&);
     Matrix<T> transpose();
+
+    // Operators //
+    Matrix<T> operator+(const Matrix<T>&) const;
+    Matrix<T> operator-(const Matrix<T>&) const;
+    Matrix<T> operator*(const Matrix<T>&) const;
+
+    Matrix<T>& operator+=(const Matrix<T>&);
+    Matrix<T>& operator-=(const Matrix<T>&);
+    Matrix<T>& operator*=(const Matrix<T>&);
+
+    bool operator==(const Matrix<T>&) const;
+    bool operator!=(const Matrix<T>&) const;
+
+    friend std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix);
+    friend std::istream& operator>>(std::istream& in, Matrix<T>& matrix);
 };
 
 // Constructors //
@@ -65,3 +80,34 @@ template<class T>
 Matrix<T> Matrix<T>::mult(const Matrix<T>& other) {}
 template<class T>
 Matrix<T> Matrix<T>::transpose() {}
+
+// Operators //
+template<class T>
+Matrix<T> Matrix<T>::operator+(const Matrix<T>&) const {}
+
+template<class T>
+Matrix<T> Matrix<T>::operator-(const Matrix<T>&) const {}
+
+template<class T>
+Matrix<T> Matrix<T>::operator*(const Matrix<T>&) const {}
+
+template<class T>
+Matrix<T>& Matrix<T>::operator+=(const Matrix<T>&) {}
+
+template<class T>
+Matrix<T>& Matrix<T>::operator-=(const Matrix<T>&) {}
+
+template<class T>
+Matrix<T>& Matrix<T>::operator*=(const Matrix<T>&) {}
+
+template<class T>
+bool Matrix<T>::operator==(const Matrix<T>&) const {}
+
+template<class T>
+bool Matrix<T>::operator!=(const Matrix<T>&) const {}
+
+template<class T>
+std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {}
+
+template<class T>
+std::istream& operator>>(std::istream& in, Matrix<T>& matrix) {}
