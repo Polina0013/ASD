@@ -24,9 +24,9 @@ public:
     // Destructor //
     ~Matrix();
 
-    Matrix<T> add(Matrix<T>&);
-    Matrix<T> sub(Matrix<T>&);
-    Matrix<T> mult(Matrix<T>&);
+    Matrix<T> add(const Matrix<T>&);
+    Matrix<T> sub(const Matrix<T>&);
+    Matrix<T> mult(const Matrix<T>&);
     Matrix<T> transpose();
 };
 
@@ -58,10 +58,10 @@ Matrix<T>::~Matrix() {
 }
 
 template<class T>
-Matrix<T> Matrix<T>::add(Matrix<T>& other) {}
+Matrix<T> Matrix<T>::add(const Matrix<T>& other) {}
 template<class T>
-Matrix<T> Matrix<T>::sub(Matrix<T>& other) {}
+Matrix<T> Matrix<T>::sub(const Matrix<T>& other) {}
 template<class T>
-Matrix<T> Matrix<T>::mult(Matrix<T>& other) {}
+Matrix<T> Matrix<T>::mult(const Matrix<T>& other) {}
 template<class T>
 Matrix<T> Matrix<T>::transpose() {}
