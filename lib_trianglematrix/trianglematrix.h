@@ -28,6 +28,22 @@ public:
     TriangleMatrix<T> sub(const TriangleMatrix<T>&);
     TriangleMatrix<T> mult(const TriangleMatrix<T>&);
     TriangleMatrix<T> transpose();
+
+    // Operators //
+    TriangleMatrix<T> operator+(const TriangleMatrix<T>&) const;
+    TriangleMatrix<T> operator-(const TriangleMatrix<T>&) const;
+    TriangleMatrix<T> operator*(const TriangleMatrix<T>&) const;
+
+    TriangleMatrix<T>& operator+=(const TriangleMatrix<T>&);
+    TriangleMatrix<T>& operator-=(const TriangleMatrix<T>&);
+    TriangleMatrix<T>& operator*=(const TriangleMatrix<T>&);
+
+    bool operator==(const TriangleMatrix<T>&) const;
+    bool operator!=(const TriangleMatrix<T>&) const;
+
+    friend std::ostream& operator<<(std::ostream& out, const TriangleMatrix<T>& matrix);
+    friend std::istream& operator>>(std::istream& in, TriangleMatrix<T>& matrix);
+};
 };
 
 // Constructors //
@@ -65,3 +81,34 @@ template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::mult(const TriangleMatrix<T>& other) {}
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::transpose() {}
+
+// Operators //
+template<class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator+(const TriangleMatrix<T>&) const {}
+
+template<class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator-(const TriangleMatrix<T>&) const {}
+
+template<class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator*(const TriangleMatrix<T>&) const {}
+
+template<class T>
+TriangleMatrix<T>& TriangleMatrix<T>::operator+=(const TriangleMatrix<T>&) {}
+
+template<class T>
+TriangleMatrix<T>& TriangleMatrix<T>::operator-=(const TriangleMatrix<T>&) {}
+
+template<class T>
+TriangleMatrix<T>& TriangleMatrix<T>::operator*=(const TriangleMatrix<T>&) {}
+
+template<class T>
+bool TriangleMatrix<T>::operator==(const TriangleMatrix<T>&) const {}
+
+template<class T>
+bool TriangleMatrix<T>::operator!=(const TriangleMatrix<T>&) const {}
+
+template<class T>
+std::ostream& operator<<(std::ostream& out, const TriangleMatrix<T>& matrix) {}
+
+template<class T>
+std::istream& operator>>(std::istream& in, TriangleMatrix<T>& matrix) {}
