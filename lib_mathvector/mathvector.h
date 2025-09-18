@@ -29,7 +29,20 @@ public:
     MathVector<T> add(MathVector<T>&);
     MathVector<T> sub(MathVector<T>&);
     MathVector<T> mult(MathVector<T>&);
-    MathVector<T> transpose();
+
+    // Operators //
+    T& operator[](int index);
+
+    MathVector<T> operator+(const MathVector<T>&) const;
+    MathVector<T> operator-(const MathVector<T>&) const;
+    MathVector<T> operator*(const MathVector<T>&) const;
+
+    MathVector<T>& operator+=(const MathVector<T>&);
+    MathVector<T>& operator-=(const MathVector<T>&);
+    MathVector<T>& operator*=(const MathVector<T>&);
+
+    bool operator==(const MathVector<T>&) const;
+    bool operator!=(const MathVector<T>&) const;
 };
 
 // Constructors //
@@ -70,5 +83,31 @@ template<class T>
 MathVector<T> MathVector<T>::sub(MathVector<T>& other) {}
 template<class T>
 MathVector<T> MathVector<T>::mult(MathVector<T>& other) {}
+
+// Operators //
 template<class T>
-MathVector<T> MathVector<T>::transpose() {}
+T& MathVector<T>::operator[](int index) {}
+
+template<class T>
+MathVector<T> MathVector<T>::operator+(const MathVector<T>&) const {}
+
+template<class T>
+MathVector<T> MathVector<T>::operator-(const MathVector<T>&) const {}
+
+template<class T>
+MathVector<T> MathVector<T>::operator*(const MathVector<T>&) const {}
+
+template<class T>
+MathVector<T>& MathVector<T>::operator+=(const MathVector<T>&) {}
+
+template<class T>
+MathVector<T>& MathVector<T>::operator-=(const MathVector<T>&) {}
+
+template<class T>
+MathVector<T>& MathVector<T>::operator*=(const MathVector<T>&) {}
+
+template<class T>
+bool MathVector<T>::operator==(const MathVector<T>&) const {}
+
+template<class T>
+bool MathVector<T>::operator!=(const MathVector<T>&) const {}
