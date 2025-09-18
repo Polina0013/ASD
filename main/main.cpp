@@ -3,7 +3,7 @@
 #include <iostream>
 
 //#define EASY_EXAMPLE
-#define TVECTOR
+#define MATRIX_APP
 
 #ifdef EASY_EXAMPLE
 #include <iomanip>
@@ -42,11 +42,11 @@ int main() {
 #endif  // EASY_EXAMPLE
 
 
-#ifdef TVECTOR
+#ifdef MATRIX_APP
 #include "..\lib_tvector\tvector.h"
 #include "..\lib_mathvector\mathvector.h"
 #include "..\lib_matrix\matrix.h"
-//#include "..\lib_trianglematrix\trianglematrix.h"
+#include "..\lib_trianglematrix\trianglematrix.h"
 
 int start_menu() {
     std::cout << "**** The location of the output of the two matrices ****" << std::endl;
@@ -111,18 +111,18 @@ int main() {
                     system("pause");
                     continue;
                 case (3):
-                    //first_matrix = first_matrix.add(second_matrix);
+                    first_matrix = first_matrix.add(second_matrix); //
                     std::cout << "Add" << std::endl;
                     system("pause");
                     continue;
                 case (4):
-                    //first_matrix = first_matrix.sub(second_matrix);
+                    first_matrix = first_matrix.sub(second_matrix); //
                     std::cout << "Sub" << std::endl;
                     system("pause");
                     continue;
                 case (5):
-                    //result_multiply = Matrix<int>(M1, N2);
-                    //result_multiply = first_matrix.mult(second_matrix);
+                    result_multiply = Matrix<int>(M1, N2);              //
+                    result_multiply = first_matrix.mult(second_matrix); //
                     std::cout << "Mult" << std::endl;
                     system("pause");
                     continue;
@@ -137,16 +137,65 @@ int main() {
             }
             break;
         case (2):
+            while (isBack == false) {
+                system("cls");
 
+                TriangleMatrix<int> first_matrix;
+                TriangleMatrix<int> second_matrix;
+                TriangleMatrix<int> result_multiply;
+                int M1;
+                int M2;
+
+                int choice = matrices_menu();
+                switch (choice)
+                {
+                case (1):
+                    std::cout << "Enter the size of the first matrix:" << std::endl;
+                    std::cin >> M1;
+                    first_matrix = TriangleMatrix<int>(M1);
+                    std::cout << "First matrix create!" << std::endl;
+                    system("pause");
+                    continue;
+                case (2):
+                    std::cout << "Enter the size of the second matrix:" << std::endl;
+                    std::cin >> M2;
+                    second_matrix = TriangleMatrix<int>(M2);
+                    std::cout << "Second matrix create!" << std::endl;
+                    system("pause");
+                    continue;
+                case (3):
+                    first_matrix = first_matrix.add(second_matrix); //
+                    std::cout << "Add" << std::endl;
+                    system("pause");
+                    continue;
+                case (4):
+                    first_matrix = first_matrix.sub(second_matrix); //
+                    std::cout << "Sub" << std::endl;
+                    system("pause");
+                    continue;
+                case (5):
+                    result_multiply = TriangleMatrix<int>(M1);          //
+                    result_multiply = first_matrix.mult(second_matrix); //
+                    std::cout << "Mult" << std::endl;
+                    system("pause");
+                    continue;
+                case (6):
+                    isBack = true;
+                    break;
+                case (0):
+                    return 0;
+                default:
+                    continue;
+                }
+            }
             break;
         case (0):
-            break;
+            return 0;
         default:
             continue;
         }
     }
-
     return 0;
 }
 
-#endif // TVECTOR
+#endif // MATRIX_APP
