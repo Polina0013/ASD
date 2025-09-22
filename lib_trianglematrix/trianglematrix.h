@@ -44,7 +44,6 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const TriangleMatrix<T>& matrix);
     friend std::istream& operator>>(std::istream& in, TriangleMatrix<T>& matrix);
 };
-};
 
 // Constructors //
 template<class T>
