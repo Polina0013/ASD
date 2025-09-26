@@ -1,3 +1,5 @@
+// Copyright 2025 Polina Pozdnova
+
 #pragma once
 
 #include <iostream>
