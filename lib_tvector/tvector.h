@@ -1,4 +1,5 @@
 // Copyright 2025 Pozdnova Polina
+
 #pragma once
 
 #include <iostream>
@@ -78,6 +79,9 @@ public:
     bool operator==(const TVector<T>&) const;
     bool operator!=(const TVector<T>&) const;
     T& operator[](int) const;
+    
+    friend void hoara_sort(TVector<T>& mass, int start, int end) {};
+    friend void knuth_shuffle(TVector<T>& vec) {};
 
 private:
     void effective_deletion();
