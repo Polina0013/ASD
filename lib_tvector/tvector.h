@@ -167,9 +167,6 @@ int TVector<T>::size() const noexcept { return _size - _deleted; }
 template<class T>
 int TVector<T>::capacity() const noexcept { return _capacity; }
 
-//template<class T>
-//size_t TVector<T>::deleted_count() const noexcept { return _deleted; }
-
 template<class T>
 int TVector<T>::get_deleted() const noexcept { return _deleted; }
 
@@ -337,36 +334,6 @@ template<class T> void TVector<T>::push_front(const T& value) {
     }
 }
 
-//template<class T>
-//void TVector<T>::push_back(const T& value) {
-//    if (is_full()) {
-//        reserve(_capacity + CAPACITY);
-//    }
-//
-//    // Find first empty spot at the end
-//    int insert_pos = _size;
-//    while (insert_pos > 0 && _states[insert_pos - 1] != busy) {
-//        insert_pos--;
-//    }
-//
-//    if (insert_pos < _capacity) {
-//        if (_states[insert_pos] == deleted) {
-//            _deleted--;
-//        }
-//        else {
-//            _size++;
-//        }
-//        _data[insert_pos] = value;
-//        _states[insert_pos] = busy;
-//    }
-//    else {
-//        reserve(_capacity + CAPACITY);
-//        _data[_size] = value;
-//        _states[_size] = busy;
-//        _size++;
-//    }
-//}
-
 template<class T>
 void TVector<T>::push_back(const T& value) {
     if (is_full()) reserve(_size + CAPACITY);
@@ -374,22 +341,6 @@ void TVector<T>::push_back(const T& value) {
     _data[_size] = value;
     _states[_size] = busy;
     _size++;
-
-    /*for (int i = _capacity; i >= 0; i--) {
-        if (_states[i] == busy) {
-            _data[i+1] = value;
-            if (_states[i+1] == deleted) _deleted--;
-            if (_states[i+1] == empty) _size++;
-            _states[i + 1] = busy;
-            break;
-        }
-        if (i == 0) {
-            _data[i] = value;
-            if (_states[i] == deleted) _deleted--;
-            if (_states[i] == empty) _size++;
-            _states[i] = busy;
-        }
-    }*/
 }
 
 template<class T>
@@ -420,14 +371,6 @@ void TVector<T>::insert(int index, const T& value) {
         }
         insert_pos++;
     }
-
-    //while (insert_pos < _capacity&& _states[insert_pos] == busy) {
-    //    insert_pos++;
-    //}
-
-    //if (insert_pos >= _capacity) {
-    //    reserve(_capacity + CAPACITY);
-    //}
 
     for (int i = _size; i > insert_pos; i--) {
         _data[i] = _data[i - 1];
@@ -475,8 +418,6 @@ void TVector<T>::pop_back() {
             break;
         }
     }
-
-    //if (last_busy == -1) return;
 
     _states[last_busy] = deleted;
     _deleted++;
@@ -565,7 +506,6 @@ template<class T> void TVector<T>::resize(int new_size) {
     }
     else if (new_size < _capacity) {    // capacity םו ןונוגûהוכÿועסÿ
         for (int i = _size; i < new_size; i++) {
-            //_data[i] = T{};
             _states[i] = busy;
         }
         _size = new_size;
@@ -574,7 +514,6 @@ template<class T> void TVector<T>::resize(int new_size) {
         reserve(new_size + CAPACITY);
 
         for (int i = _size; i < new_size; i++) {
-            //_data[i] = T{};
             _states[i] = busy;
         }
         _size = new_size;
@@ -738,9 +677,6 @@ template <class T> void hoara_sort(TVector<T>& mass, int start, int end) {
         if (l <= r) {
             std::swap(mass._data[l], mass._data[r]);
             std::swap(mass._states[l], mass._states[r]);
-            //T temp = mass[l];
-            //mass[l] = mass[r];
-            //mass[r] = temp;
             l++;
             r--;
         }
