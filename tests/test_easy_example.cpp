@@ -5,7 +5,9 @@
 
 #define EPSILON 0.000001
 
-/*
+//#define TEST_EASY_EXAMPLE
+#ifdef TEST_EASY_EXAMPLE
+
 TEST(TestEasyExampleLib, can_div) {
   // Arrange
   int x = 10;
@@ -49,4 +51,5 @@ TEST(TestEasyExampleLib, throw_when_try_div_by_zero) {
   // Act & Assert
   ASSERT_ANY_THROW(division(x, y));
 }
-*/
+
+#endif // TEST_EASY_EXAMPLE

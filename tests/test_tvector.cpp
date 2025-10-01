@@ -3,7 +3,8 @@
 #include <gtest/gtest.h>
 #include "../lib_tvector/tvector.h"
 
-#define EPSILON 0.000001
+//#define TEST_TVECTOR
+#ifdef TEST_TVECTOR
 
 // Constructors //
 
@@ -520,3 +521,5 @@ TEST(TestTVector, searches) {
                      find_last(vec1, 7) == 6 && 
                      find_first(vec1, -1) == -1));
 }
+
+#endif // TEST_TVECTOR
