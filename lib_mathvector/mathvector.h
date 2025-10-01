@@ -1,12 +1,11 @@
 // НЕ РЕАЛИЗОВАНО
-// Математический вектор. Сложение, умножение, вычитание векторов 
+// Математический вектор. Сложение, вычитание, умножение и деление на число, скалярное произведение 
+// Доделать тесты, проверить первые скопированный тесты на нужность 
 // Copyright 2025 Pozdnova Polina
+
 #pragma once
 
 #include <iostream>
-#include <utility>
-#include <random>
-#include <chrono>
 #include <initializer_list>
 #include <stdexcept>
 
@@ -26,88 +25,153 @@ public:
     // Destructor //
     ~MathVector();
 
-    MathVector<T> add(MathVector<T>&);
-    MathVector<T> sub(MathVector<T>&);
-    MathVector<T> mult(MathVector<T>&);
+    MathVector<T> add(const MathVector<T>&) const;
+    MathVector<T> sub(const MathVector<T>&) const;
+    MathVector<T> mult_by_number(const T&) const;
+    MathVector<T> div_by_number(const T&) const;
+    T scalar_mult(const MathVector<T>&) const;
 
     // Operators //
-    T& operator[](int index);
 
+    using TVector<T>::operator[];
+    using TVector<T>::operator==;
+    using TVector<T>::operator!=;
+    
     MathVector<T> operator+(const MathVector<T>&) const;
     MathVector<T> operator-(const MathVector<T>&) const;
-    MathVector<T> operator*(const MathVector<T>&) const;
+    MathVector<T> operator*(const T&) const;
+    MathVector<T> operator/(const T&) const;
+    T operator*(const MathVector<T>&) const;
 
     MathVector<T>& operator+=(const MathVector<T>&);
     MathVector<T>& operator-=(const MathVector<T>&);
-    MathVector<T>& operator*=(const MathVector<T>&);
-
-    bool operator==(const MathVector<T>&) const;
-    bool operator!=(const MathVector<T>&) const;
+    MathVector<T>& operator*=(const T&);
+    MathVector<T>& operator/=(const T&);
 };
 
 // Constructors //
 template<class T>
-MathVector<T>::MathVector() {
-
-}
+MathVector<T>::MathVector() : TVector<T>() {}
 
 template<class T>
-MathVector<T>::MathVector(int size) {
-
-}
+MathVector<T>::MathVector(int size) : TVector<T>(size) {}
 
 template<class T>
-MathVector<T>::MathVector(int size, const T* data) {
-
-}
+MathVector<T>::MathVector(int size, const T* data) : TVector<T>(size, data) {}
 
 template<class T>
-MathVector<T>::MathVector(std::initializer_list<T> init) {
-
-}
+MathVector<T>::MathVector(std::initializer_list<T> init) : TVector<T>(init) {}
 
 template<class T>
-MathVector<T>::MathVector(const MathVector<T>& other) {
-
-}
+MathVector<T>::MathVector(const MathVector<T>& other) : TVector<T>(other) {}
 
 // Destructor //
 template<class T>
-MathVector<T>::~MathVector() {
+MathVector<T>::~MathVector() {}
 
+// Functions //
+template<class T>
+MathVector<T> MathVector<T>::add(const MathVector<T>& other) const {
+    if (this->size() != other.size()) throw std::logic_error("The dimensions of the vectors do not match!");
+
+    MathVector<T> result(this->size());
+
+    for (int i = 0; i < this->size(); i++) {
+        result.data()[i] = this->data()[i] + other.data()[i];
+    }
+    return result;
 }
 
 template<class T>
-MathVector<T> MathVector<T>::add(MathVector<T>& other) {}
+MathVector<T> MathVector<T>::sub(const MathVector<T>& other) const {
+    if (this->size() != other.size()) throw std::logic_error("The dimensions of the vectors do not match!");
+
+    MathVector<T> result(this->size());
+
+    for (int i = 0; i < this->size(); i++) {
+        result.data()[i] = this->data()[i] - other.data()[i];
+    }
+    return result;
+}
+
 template<class T>
-MathVector<T> MathVector<T>::sub(MathVector<T>& other) {}
+MathVector<T> MathVector<T>::mult_by_number(const T& other) const {
+    MathVector<T> result(this->size());
+
+    for (int i = 0; i < this->size(); i++) {
+        result.data()[i] = this->data()[i] * other;
+    }
+    return result;
+}
+
 template<class T>
-MathVector<T> MathVector<T>::mult(MathVector<T>& other) {}
+MathVector<T> MathVector<T>::div_by_number(const T& other) const {
+    MathVector<T> result(this->size());
+
+    for (int i = 0; i < this->size(); i++) {
+        result.data()[i] = this->data()[i] / other;
+    }
+    return result;
+}
+
+template<class T>
+T MathVector<T>::scalar_mult(const MathVector<T>& other) const {
+    if (this->size() != other.size()) throw std::logic_error("The dimensions of the vectors do not match!");
+
+    T result = T();
+
+    for (int i = 0; i < this->size(); i++) {
+        result += this->data()[i] * other.data()[i];
+    }
+    return result;
+}
 
 // Operators //
 template<class T>
-T& MathVector<T>::operator[](int index) {}
+MathVector<T> MathVector<T>::operator+(const MathVector<T>& other) const {
+    return this->add(other);
+}
 
 template<class T>
-MathVector<T> MathVector<T>::operator+(const MathVector<T>&) const {}
+MathVector<T> MathVector<T>::operator-(const MathVector<T>& other) const {
+    return this->sub(other);
+}
 
 template<class T>
-MathVector<T> MathVector<T>::operator-(const MathVector<T>&) const {}
+MathVector<T> MathVector<T>::operator*(const T& other) const {
+    return this->mult_by_number(other);
+}
 
 template<class T>
-MathVector<T> MathVector<T>::operator*(const MathVector<T>&) const {}
+MathVector<T> MathVector<T>::operator/(const T& other) const {
+    return this->div_by_number(other);
+}
 
 template<class T>
-MathVector<T>& MathVector<T>::operator+=(const MathVector<T>&) {}
+T MathVector<T>::operator*(const MathVector<T>& other) const {
+    return this->scalar_mult(other);
+}
 
 template<class T>
-MathVector<T>& MathVector<T>::operator-=(const MathVector<T>&) {}
+MathVector<T>& MathVector<T>::operator+=(const MathVector<T>& other) {
+    *this = *this + other;
+    return *this;
+}
 
 template<class T>
-MathVector<T>& MathVector<T>::operator*=(const MathVector<T>&) {}
+MathVector<T>& MathVector<T>::operator-=(const MathVector<T>& other) {
+    *this = *this - other;
+    return *this;
+}
 
 template<class T>
-bool MathVector<T>::operator==(const MathVector<T>&) const {}
+MathVector<T>& MathVector<T>::operator*=(const T& other) {
+    *this = *this * other;
+    return *this;
+}
 
 template<class T>
-bool MathVector<T>::operator!=(const MathVector<T>&) const {}
+MathVector<T>& MathVector<T>::operator/=(const T& other) {
+    *this = *this / other;
+    return *this;
+}
