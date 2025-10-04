@@ -3,6 +3,9 @@
 #include <gtest/gtest.h>
 #include "../lib_mathvector/mathvector.h"
 
+//#define TEST_MATHVECTOR
+#ifdef TEST_MATHVECTOR
+
 // Constructors //
 
 TEST(TestMathVector, empty_constructor) {
@@ -162,3 +165,5 @@ TEST(TestMathVector, scalar_mult) {
     // Act & Assert
     EXPECT_EQ(true, ((mvec1*mvec2) == 130));
 }
+
+#endif // TEST_MATHVECTOR

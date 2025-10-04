@@ -22,6 +22,7 @@ public:
     // Destructor //
     ~MathVector();
 
+    // Functions //
     MathVector<T> add(const MathVector<T>&) const;
     MathVector<T> sub(const MathVector<T>&) const;
     MathVector<T> mult_by_number(const T&) const;
@@ -29,7 +30,6 @@ public:
     T scalar_mult(const MathVector<T>&) const;
 
     // Operators //
-
     using TVector<T>::operator[];
     using TVector<T>::operator==;
     using TVector<T>::operator!=;
@@ -103,6 +103,8 @@ MathVector<T> MathVector<T>::mult_by_number(const T& other) const {
 
 template<class T>
 MathVector<T> MathVector<T>::div_by_number(const T& other) const {
+    if (value == T()) throw std::logic_error("Division by zero!");
+    
     MathVector<T> result(this->size());
 
     for (int i = 0; i < this->size(); i++) {
