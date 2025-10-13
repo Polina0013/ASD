@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include "../lib_matrix/matrix.h"
 
-#define TEST_MATRIX
+//#define TEST_MATRIX
 #ifdef TEST_MATRIX
 
 // Constructors //
@@ -64,19 +64,19 @@ TEST(TestMatrix, copy_constructor) {
 TEST(TestMatrix, throw_error_when_adding_matrices_of_different_sizes) {
     // Arrange
     Matrix<int>
-    mvec1 = { 
+    mat1 = { 
         {1, 2, 3, 4, 5 },
         {1, 2, 3, 4, 5 }
     },
 
-    mvec2 = {
+    mat2 = {
         { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
         { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
         { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
     };
 
     // Act & Assert
-    ASSERT_ANY_THROW(mvec1+=mvec2);
+    ASSERT_ANY_THROW(mat1+=mat2);
 }
 
 TEST(TestMatrix, add) {
@@ -234,14 +234,14 @@ TEST(TestMatrix, div_by_number) {
 
 TEST(TestMatrix, transpose) {
     // Arrange
-    Matrix<int> matrix = {
-        {5, 10},
-        {15, 20},
-        {25, 30},
-        {35, 40}
+    Matrix<double> matrix = {
+        {5.0, 10.0},
+        {15.0, 20.0},
+        {25.0, 30.0},
+        {35.0, 40.0}
     }, result = {
-        {5, 15, 25, 35},
-        {10, 20, 30, 40}
+        {5.0, 15.0, 25.0, 35.0},
+        {10.0, 20.0, 30.0, 40.0}
     };
     // Act & Assert
     EXPECT_EQ(true, ((matrix.transpose()) == result));

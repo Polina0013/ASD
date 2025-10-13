@@ -54,9 +54,6 @@ public:
 
     bool operator==(const Matrix<T>&) const;
     bool operator!=(const Matrix<T>&) const;
-
-    friend std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix);
-    friend std::istream& operator>>(std::istream& in, Matrix<T>& matrix);
 };
 
 // Constructors //
@@ -100,7 +97,7 @@ Matrix<T>::~Matrix() {}
 
 // Getters //
 template<class T>
-int Matrix<T>::get_rows() const noexcept { return _row; }
+int Matrix<T>::get_rows() const noexcept { return _rows; }
 
 template<class T>
 int Matrix<T>::get_columns() const noexcept { return _columns; }
@@ -119,7 +116,7 @@ Matrix<T> Matrix<T>::add(const Matrix<T>& other) const {
 
 template<class T>
 Matrix<T> Matrix<T>::sub(const Matrix<T>& other) const {
-    if (_rows != other._rows || _columns != other._columns) throw std::logic_error("Matrix sizes do not match for addition!");
+    if (_rows != other._rows || _columns != other._columns) throw std::logic_error("Matrix sizes do not match for subtraction!");
 
     Matrix<T> result(_rows, _columns);
 
@@ -254,7 +251,7 @@ bool Matrix<T>::operator==(const Matrix<T>& other) const {
 
     if (_rows == 0 || _columns == 0) return true;
 
-    // Обычное сравнение ля целых типов
+    // Обычное сравнение для целых типов
     if constexpr (std::is_integral<T>::value) {
         for (int i = 0; i < _rows; ++i) {
             if ((*this)[i] != other[i]) return false;
@@ -281,34 +278,30 @@ bool Matrix<T>::operator!=(const Matrix<T>& other) const {
 
 template<class T>
 std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {
-    friend std::ostream& operator<<(std::ostream & out, const Matrix<T>&matrix) {
-        if (matrix._rows == 0 || matrix._columns == 0)
-            return out << "[ Empty Matrix ]\n";
-
-        out << "|" << "\n";
-        out << "v" << "\n";
-        for (int i = 0; i < matrix._rows; ++i) {
-            for (int j = 0; j < matrix._columns; ++j)
-                out << matrix[i][j] << ' ';
-            out << '\n';
-        }
-        out << "^" << "\n";
-        out << "|" << "\n";
-        return out;
+    if (matrix.get_rows() == 0 || matrix.get_columns() == 0) {
+        return out << "[ Empty Matrix ]\n";
     }
+    out << "v" << "\n";
+    for (int i = 0; i < matrix.get_rows(); ++i) {
+        for (int j = 0; j < matrix.get_columns(); ++j)
+            out << matrix[i][j] << ' ';
+        out << '\n';
+    }
+    out << "^" << "\n";
+    return out;
 }
 
 template<class T>
 std::istream& operator>>(std::istream& in, Matrix<T>& matrix) {
-    int rows, columns;
-    std::cout << "Enter rows and columns: ";
-    in >> rows >> columns;
-    std::cout << "\n";
+    int rows = matrix.get_rows();
+    int columns = matrix.get_columns();
 
-    matrix = Matrix<T>(rows, columns);
+    if (rows == 0 || columns == 0) throw std::logic_error("Matrix dimensions are zero; cannot input elements.");
 
+    std::cout << "Enter elements (" << rows << "x" << columns << "):\n";
     for (int i = 0; i < rows; ++i)
         for (int j = 0; j < columns; ++j)
             in >> matrix[i][j];
+
     return in;
 }

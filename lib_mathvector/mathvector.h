@@ -103,7 +103,7 @@ MathVector<T> MathVector<T>::mult_by_number(const T& other) const {
 
 template<class T>
 MathVector<T> MathVector<T>::div_by_number(const T& other) const {
-    if (value == T()) throw std::logic_error("Division by zero!");
+    if (other == T()) throw std::logic_error("Division by zero!");
     
     MathVector<T> result(this->size());
 
