@@ -15,10 +15,12 @@ include(cmake/function.cmake)         # подхватываем функции,
 
 add_subdirectory(lib_easy_example)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
 
-add_subdirectory(lib_tvector)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tvector
-add_subdirectory(lib_mathvector)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_mathvector
-add_subdirectory(lib_matrix)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_matrix
-add_subdirectory(lib_trianglematrix)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_trianglematrix
+add_subdirectory(lib_tvector)         # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tvector
+add_subdirectory(lib_mathvector)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_mathvector
+add_subdirectory(lib_matrix)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_matrix
+add_subdirectory(lib_trianglematrix)  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_trianglematrix
+add_subdirectory(lib_algorithms)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_algorithms
+add_subdirectory(lib_stack)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack
 
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
