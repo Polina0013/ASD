@@ -20,7 +20,9 @@ add_subdirectory(lib_mathvector)      # подключаем дополните�
 add_subdirectory(lib_matrix)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_matrix
 add_subdirectory(lib_trianglematrix)  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_trianglematrix
 add_subdirectory(lib_algorithms)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_algorithms
+
 add_subdirectory(lib_stack)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack
+add_subdirectory(lib_queue)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue
 
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
