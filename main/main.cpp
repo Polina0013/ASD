@@ -48,8 +48,18 @@ int main() {
 #include "..\lib_matrix\matrix.h"
 #include "..\lib_trianglematrix\trianglematrix.h"
 
+int select_data_type() {
+    std::cout << "Select the data type:" << std::endl;
+    std::cout << "1. int" << std::endl;
+    std::cout << "2. float" << std::endl;
+    //std::cout << "3. double" << std::endl;
+    std::cout << "0. Exit" << std::endl;
+    int choice;
+    std::cin >> choice;
+    return choice;
+}
+
 int start_menu() {
-    std::cout << "**** The location of the output of the two matrices ****" << std::endl;
     std::cout << "Choose a work option:" << std::endl;
     std::cout << "1. Simple matrices" << std::endl;
     std::cout << "2. Triangular matrices" << std::endl;
@@ -59,24 +69,49 @@ int start_menu() {
     return choice;
 }
 
-int matrices_menu() {
-    std::cout << "**** The location of the output of the two matrices ****" << std::endl;
+int simple_matrices_menu() {
     std::cout << "Choose a work option:" << std::endl;
     std::cout << "1. Create the first matrix" << std::endl;
     std::cout << "2. Create the second matrix" << std::endl;
     std::cout << "3. Add" << std::endl;
     std::cout << "4. Subtract" << std::endl;
     std::cout << "5. Multiply" << std::endl;
-    std::cout << "6. Back" << std::endl;
+    std::cout << "6. Multiply by number" << std::endl;
+    std::cout << "7. Divide by number" << std::endl;
+    std::cout << "8. Back" << std::endl;
     std::cout << "0. Exit" << std::endl;
     int choice;
     std::cin >> choice;
     return choice;
 }
 
+
 int main() {
     while (1) {
         system("cls");
+        int data_type = select_data_type();
+        switch (data_type)
+        {
+        case (1): // int
+
+
+
+
+            continue;
+        case (2): // float
+
+            continue;
+        /*case (3): // double
+            continue;*/
+        default:
+            continue;
+        }
+
+        Matrix<int> first_simple_matrix;
+        Matrix<int> second_simple_matrix;
+        Matrix<int> result;
+        int rows_of_first_mat, cols_of_first_mat;
+        int rows_of_second_mat, cols_of_second_mat;
 
         bool isBack = false;
 
@@ -84,49 +119,65 @@ int main() {
         switch (choice)
         {
         case (1):
+
             while (isBack == false) {
                 system("cls");
 
-                Matrix<int> first_matrix;
-                Matrix<int> second_matrix;
-                Matrix<int> result_multiply;
-                int M1, N1;
-                int M2, N2;
+                std::cout << first_simple_matrix << "\n";
+                std::cout << second_simple_matrix << "\n";
 
-                int choice = matrices_menu();
+                int choice = simple_matrices_menu();
                 switch (choice)
                 {
                 case (1):
-                    std::cout << "Enter the size of the first matrix:" << std::endl;
-                    std::cin >> M1 >> N1;
-                    first_matrix = Matrix<int>(M1, N1);
-                    std::cout << "First matrix create!" << std::endl;
+                    std::cout << "Enter the size of the first matrix (rows and columns): ";
+                    std::cin >> rows_of_first_mat >> cols_of_first_mat;
+                    first_simple_matrix = Matrix<int>(rows_of_first_mat, cols_of_first_mat);
+
+                    std::cin >> first_simple_matrix;
+
+                    std::cout << "First matrix created successfully!\n";
                     system("pause");
                     continue;
                 case (2):
-                    std::cout << "Enter the size of the second matrix:" << std::endl;
-                    std::cin >> M2 >> N2;
-                    second_matrix = Matrix<int>(M2, N2);
-                    std::cout << "Second matrix create!" << std::endl;
+                    std::cout << "Enter the size of the second matrix (rows and columns): ";
+                    std::cin >> rows_of_second_mat >> cols_of_second_mat;
+                    first_simple_matrix = Matrix<int>(rows_of_second_mat, cols_of_second_mat);
+
+                    std::cin >> second_simple_matrix;
+
+                    std::cout << "Second matrix created successfully!\n";
                     system("pause");
                     continue;
                 case (3):
-                    first_matrix = first_matrix.add(second_matrix); //
-                    std::cout << "Add" << std::endl;
-                    system("pause");
+                    //first_simple_matrix = first_simple_matrix.add(second_simple_matrix); //
+                    //std::cout << "Add" << std::endl;
+                    //system("pause");
                     continue;
                 case (4):
-                    first_matrix = first_matrix.sub(second_matrix); //
-                    std::cout << "Sub" << std::endl;
-                    system("pause");
+                    //first_simple_matrix = first_simple_matrix.sub(second_simple_matrix); //
+                    //std::cout << "Sub" << std::endl;
+                    //system("pause");
                     continue;
                 case (5):
-                    result_multiply = Matrix<int>(M1, N2);              //
-                    result_multiply = first_matrix.mult(second_matrix); //
-                    std::cout << "Mult" << std::endl;
-                    system("pause");
+                    //result = Matrix<int>(rows_of_first_mat, cols_of_second_mat);              //
+                    //result = first_simple_matrix.mult(second_simple_matrix); //
+                    //std::cout << "Mult" << std::endl;
+                    //system("pause");
                     continue;
                 case (6):
+                    //result = Matrix<int>(rows_of_first_mat, cols_of_second_mat);              //
+                    //result = first_simple_matrix.mult(second_simple_matrix); //
+                    //std::cout << "Mult" << std::endl;
+                    //system("pause");
+                    continue;
+                case (7):
+                    //result = Matrix<int>(rows_of_first_mat, cols_of_second_mat);              //
+                    //result = first_simple_matrix.mult(second_simple_matrix); //
+                    //std::cout << "Mult" << std::endl;
+                    //system("pause");
+                    continue;
+                case (8):
                     isBack = true;
                     break;
                 case (0):
@@ -137,57 +188,57 @@ int main() {
             }
             break;
         case (2):
-            while (isBack == false) {
-                system("cls");
+            //while (isBack == false) {
+            //    system("cls");
 
-                TriangleMatrix<int> first_matrix;
-                TriangleMatrix<int> second_matrix;
-                TriangleMatrix<int> result_multiply;
-                int M1;
-                int M2;
+            //    TriangleMatrix<int> first_simple_matrix;
+            //    TriangleMatrix<int> second_simple_matrix;
+            //    TriangleMatrix<int> result_multiply;
+            //    int rows_of_first_mat;
+            //    int rows_of_second_mat;
 
-                int choice = matrices_menu();
-                switch (choice)
-                {
-                case (1):
-                    std::cout << "Enter the size of the first matrix:" << std::endl;
-                    std::cin >> M1;
-                    first_matrix = TriangleMatrix<int>(M1);
-                    std::cout << "First matrix create!" << std::endl;
-                    system("pause");
-                    continue;
-                case (2):
-                    std::cout << "Enter the size of the second matrix:" << std::endl;
-                    std::cin >> M2;
-                    second_matrix = TriangleMatrix<int>(M2);
-                    std::cout << "Second matrix create!" << std::endl;
-                    system("pause");
-                    continue;
-                case (3):
-                    first_matrix = first_matrix.add(second_matrix); //
-                    std::cout << "Add" << std::endl;
-                    system("pause");
-                    continue;
-                case (4):
-                    first_matrix = first_matrix.sub(second_matrix); //
-                    std::cout << "Sub" << std::endl;
-                    system("pause");
-                    continue;
-                case (5):
-                    result_multiply = TriangleMatrix<int>(M1);          //
-                    result_multiply = first_matrix.mult(second_matrix); //
-                    std::cout << "Mult" << std::endl;
-                    system("pause");
-                    continue;
-                case (6):
-                    isBack = true;
-                    break;
-                case (0):
-                    return 0;
-                default:
-                    continue;
-                }
-            }
+            //    int choice = simple_matrices_menu();
+            //    switch (choice)
+            //    {
+            //    case (1):
+            //        std::cout << "Enter the size of the first matrix:" << std::endl;
+            //        std::cin >> rows_of_first_mat;
+            //        first_simple_matrix = TriangleMatrix<int>(rows_of_first_mat);
+            //        std::cout << "First matrix create!" << std::endl;
+            //        system("pause");
+            //        continue;
+            //    case (2):
+            //        std::cout << "Enter the size of the second matrix:" << std::endl;
+            //        std::cin >> rows_of_second_mat;
+            //        second_simple_matrix = TriangleMatrix<int>(rows_of_second_mat);
+            //        std::cout << "Second matrix create!" << std::endl;
+            //        system("pause");
+            //        continue;
+            //    case (3):
+            //        first_simple_matrix = first_simple_matrix.add(second_simple_matrix); //
+            //        std::cout << "Add" << std::endl;
+            //        system("pause");
+            //        continue;
+            //    case (4):
+            //        first_simple_matrix = first_simple_matrix.sub(second_simple_matrix); //
+            //        std::cout << "Sub" << std::endl;
+            //        system("pause");
+            //        continue;
+            //    case (5):
+            //        result_multiply = TriangleMatrix<int>(rows_of_first_mat);          //
+            //        result_multiply = first_simple_matrix.mult(second_simple_matrix); //
+            //        std::cout << "Mult" << std::endl;
+            //        system("pause");
+            //        continue;
+            //    case (6):
+            //        isBack = true;
+            //        break;
+            //    case (0):
+            //        return 0;
+            //    default:
+            //        continue;
+            //    }
+            //}
             break;
         case (0):
             return 0;
