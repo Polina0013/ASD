@@ -6,9 +6,11 @@
 #include <stdexcept>
 #include "..\lib_tvector\tvector.h"
 
+#define STANDARD_SIZE 15
+
 template<class T>
 class Queue {
-    T* _data; //  переделать выделение памяти 
+    T* _data;
     size_t _head;
     size_t _tail;
     size_t _count;
@@ -18,6 +20,7 @@ public:
     Queue();
     explicit Queue(size_t max_size);
     Queue(std::initializer_list<T> init);
+    Queue(const Queue& other);
 
     size_t get_head() const;
     size_t get_tail() const;
@@ -32,28 +35,38 @@ public:
     void clear() noexcept;
     T head() const;
 
-
     bool operator==(const Queue<T>& other) const;
+    Queue& operator=(const Queue& other);
+    Queue& operator=(Queue&& other) noexcept;
 };
 
 // Constructors //
 template<class T>
-Queue<T>::Queue() : _head(0), _tail(0), _count(0), _max_size(CAPACITY) {
-    _data.reserve(_max_size);
+Queue<T>::Queue() : _head(0), _tail(0), _count(0), _max_size(STANDARD_SIZE) {
+    _data = new T[_max_size];
 }
 
 template<class T>
 Queue<T>::Queue(size_t max_size) : _head(0), _tail(0), _count(0), _max_size(max_size) {
     if (max_size == 0) throw std::logic_error("Capacity must be positive");
-    _data.reserve(_max_size);
+    _data = new T[max_size];
 }
 
 template<class T>
 Queue<T>::Queue(std::initializer_list<T> init) : _head(0), _tail(0), _count(0), _max_size(init.size()) {
-    _data.resize(_max_size); 
+    _data = new T[_max_size];
 
     for (const T& val : init) {
         push(val);
+    }
+}
+
+template<class T>
+Queue<T>::Queue(const Queue& other) : _head(other._head), _tail(other._tail), _count(other._count), _max_size(other._max_size) {
+    _data = new T[_max_size];
+
+    for (size_t i = 0; i < _max_size; i++) {
+        _data[i] = other._data[i];
     }
 }
 
@@ -92,14 +105,10 @@ inline T Queue<T>::tail() const {
 }
 
 template<class T>
-inline bool Queue<T>::is_empty() const noexcept {
-    return _count == 0;
-}
+inline bool Queue<T>::is_empty() const noexcept { return _count == 0; }
 
 template<class T>
-inline bool Queue<T>::is_full() const noexcept {
-    return _count == _max_size;
-}
+inline bool Queue<T>::is_full() const noexcept { return _count == _max_size; }
 
 template<class T>
 void Queue<T>::clear() noexcept {
@@ -129,4 +138,41 @@ bool Queue<T>::operator==(const Queue<T>& other) const {
     }
 
     return true;
+}
+
+template<class T>
+Queue<T>& Queue<T>::operator=(const Queue& other) {
+    if (this != &other) {
+        if (_max_size != other._max_size) { throw std::logic_error("Cannot assign queues with different capacities"); }
+
+        for (size_t i = 0; i < _max_size; i++) {
+            _data[i] = other._data[i];
+        }
+
+        _head = other._head;
+        _tail = other._tail;
+        _count = other._count;
+    }
+    return *this;
+}
+
+template<class T>
+Queue<T>& Queue<T>::operator=(Queue&& other) noexcept {
+    if (this != &other) {
+        if (_max_size != other._max_size) {
+            throw std::logic_error("Cannot assign queues with different capacities");
+        }
+
+        delete[] _data;
+        _data = other._data;
+        _head = other._head;
+        _tail = other._tail;
+        _count = other._count;
+
+        other._data = nullptr;
+        other._head = 0;
+        other._tail = 0;
+        other._count = 0;
+    }
+    return *this;
 }
