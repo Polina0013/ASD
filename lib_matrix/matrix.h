@@ -7,14 +7,15 @@
 #include <iostream>
 #include <initializer_list>
 #include <stdexcept>
-#include <cmath>       // std::abs
-#include <type_traits> // std::is_integral, std::is_floating_point
 
 #include "..\lib_mathvector\mathvector.h"
 
 template<class T>
+class TriangleMatrix;
+
+template<class T>
 class Matrix : public MathVector<MathVector<T>> {
-protected: 
+protected:
     int _rows, _columns;
 public:
     // Constructors //
@@ -22,6 +23,7 @@ public:
     explicit Matrix(int, int);
     Matrix(const MathVector<MathVector<T>>&);
     Matrix(std::initializer_list<std::initializer_list<T>>);
+    Matrix(const TriangleMatrix<T>&);
     Matrix(const Matrix<T>&);
 
     // Destructor //
@@ -89,6 +91,41 @@ Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T>> init) : MathVe
 }
 
 template<class T>
+Matrix<T>::Matrix(const TriangleMatrix<T>& other) {
+    _rows = other.get_rows();
+    _columns = other.get_columns();
+
+    if (_rows == 0 || _columns == 0) return;
+
+    for (int i = 0; i < _rows; ++i) {
+        MathVector<T> row;
+        row.resize(_columns, T());
+        this->push_back(row);
+    }
+
+    TriangleType type = other.get_type();
+
+    if (type == TriangleType::Upper) {
+        for (int i = 0; i < _rows; ++i) {
+            const MathVector<T>& tri_row = other[i];
+
+            for (int j = 0; j < tri_row.size(); ++j) {
+                (*this)[i][i + j] = tri_row[j];
+            }
+        }
+    }
+    else {
+        for (int i = 0; i < _rows; ++i) {
+            const MathVector<T>& tri_row = other[i];
+
+            for (int j = 0; j < tri_row.size(); ++j) {
+                (*this)[i][j] = tri_row[j];
+            }
+        }
+    }
+}
+
+template<class T>
 Matrix<T>::Matrix(const Matrix<T>& other) : MathVector<MathVector<T>>(other), _rows(other._rows), _columns(other._columns) {}
 
 // Destructor //
@@ -107,22 +144,14 @@ template<class T>
 Matrix<T> Matrix<T>::add(const Matrix<T>& other) const {
     if (_rows != other._rows || _columns != other._columns) throw std::logic_error("Matrix sizes do not match for addition!");
 
-    Matrix<T> result(_rows, _columns);
-
-    for (int i = 0; i < _rows; ++i)
-        result[i] = (*this)[i] + other[i];
-    return result;
+    return this->MathVector<MathVector<T>>::operator+(other);
 }
 
 template<class T>
 Matrix<T> Matrix<T>::sub(const Matrix<T>& other) const {
     if (_rows != other._rows || _columns != other._columns) throw std::logic_error("Matrix sizes do not match for subtraction!");
 
-    Matrix<T> result(_rows, _columns);
-
-    for (int i = 0; i < _rows; ++i)
-        result[i] = (*this)[i] - other[i];
-    return result;
+    return this->MathVector<MathVector<T>>::operator-(other);
 }
 
 template<class T>
@@ -133,8 +162,8 @@ Matrix<T> Matrix<T>::mult(const Matrix<T>& other) const {
     Matrix<T> otherT = other.transpose();
 
     for (int i = 0; i < _rows; i++) {
-        for (int j = 0; j < otherT._rows; j++) {
-            result[i][j] = (*this)[i].scalar_mult(otherT[j]);
+        for (int j = 0; j < other._columns; j++) {
+            result[i][j] = (*this)[i] * otherT[j];
         }
     }
 
@@ -146,9 +175,7 @@ Matrix<T> Matrix<T>::mult_by_number(const T& other) const {
     Matrix<T> result(_rows, _columns);
 
     for (int i = 0; i < _rows; i++) {
-        for (int j = 0; j < _columns; j++) {
-            result[i][j] = (*this)[i][j] * other;
-        }
+        result[i] = (*this)[i] * other;
     }
 
     return result;
@@ -161,9 +188,7 @@ Matrix<T> Matrix<T>::div_by_number(const T& other) const {
     Matrix<T> result(_rows, _columns);
 
     for (int i = 0; i < _rows; i++) {
-        for (int j = 0; j < _columns; j++) {
-            result[i][j] = (*this)[i][j] / other;
-        }
+        result[i] = (*this)[i] / other;
     }
 
     return result;
@@ -251,24 +276,7 @@ bool Matrix<T>::operator==(const Matrix<T>& other) const {
 
     if (_rows == 0 || _columns == 0) return true;
 
-    // ќбычное сравнение дл€ целых типов
-    if constexpr (std::is_integral<T>::value) {
-        for (int i = 0; i < _rows; ++i) {
-            if ((*this)[i] != other[i]) return false;
-        }
-    }
-    // —равнение с точностью дл€ чисел с плавающей точкой
-    else {
-        double eps = 1e-6; // погрешность
-        for (int i = 0; i < _rows; ++i) {
-            for (int j = 0; j < _columns; ++j) {
-                if (std::abs((*this)[i][j] - other[i][j]) > eps)
-                    return false;
-            }
-        }
-    }
-
-    return true;
+    return this->MathVector<MathVector<T>>::operator==(other);
 }
 
 template<class T>

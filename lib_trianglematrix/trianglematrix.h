@@ -1,4 +1,4 @@
-﻿// Copyright 2025 Pozdnova Polina
+﻿// Copyright 2025 Pozdnova Polina 
 
 #pragma once
 
@@ -22,11 +22,14 @@ public:
     TriangleMatrix();
     explicit TriangleMatrix(int, TriangleType);
     TriangleMatrix(const MathVector<MathVector<T>>&, TriangleType);
+    TriangleMatrix(const Matrix<T>&);
     TriangleMatrix(std::initializer_list<std::initializer_list<T>>, TriangleType);
     TriangleMatrix(const TriangleMatrix<T>&);
 
     // Destructor //
     ~TriangleMatrix();
+
+    TriangleType get_type() const noexcept;
 
     TriangleMatrix<T> add(const TriangleMatrix<T>&) const;
     TriangleMatrix<T> sub(const TriangleMatrix<T>&) const;
@@ -51,14 +54,11 @@ public:
     bool operator==(const TriangleMatrix<T>&) const;
     bool operator!=(const TriangleMatrix<T>&) const;
 
-    friend std::ostream& operator<<(std::ostream& out, const TriangleMatrix<T>& matrix);
-    friend std::istream& operator>>(std::istream& in, TriangleMatrix<T>& matrix);
+    //friend std::ostream& operator<<(std::ostream& out, const TriangleMatrix<T>& matrix);
+    //friend std::istream& operator>>(std::istream& in, TriangleMatrix<T>& matrix);
 
     MathVector<T>& operator[](int index);
     const MathVector<T>& operator[](int index) const;
-
-    T& TriangleMatrix<T>::operator()(int i, int j);
-    const T& TriangleMatrix<T>::operator()(int i, int j) const;
 };
 
 // Constructors //
@@ -103,67 +103,162 @@ TriangleMatrix<T>::TriangleMatrix(const MathVector<MathVector<T>>& other, Triang
     }
 }
 
-
 template<class T>
-TriangleMatrix<T>::TriangleMatrix(std::initializer_list<std::initializer_list<T>> other, TriangleType t) : _type(t) {
+TriangleMatrix<T>::TriangleMatrix(std::initializer_list<std::initializer_list<T>> other, TriangleType t) : Matrix<T>(), _type(t) {
+
     this->_rows = static_cast<int>(other.size());
+    if (this->_rows == 0) {
+        this->_columns = 0;
+        return;
+    }
     this->_columns = this->_rows;
 
     this->clear();
 
     int i = 0;
-    for (const auto& row : other) {
-        this->push_back(MathVector<T>(row));
+    for (const auto& row_list : other) {
+        int actual_size = static_cast<int>(row_list.size());
+        int expected_size;
+
+        if (_type == TriangleType::Upper) {
+            expected_size = this->_columns - i;
+        }
+        else {
+            expected_size = i + 1;
+        }
+
+        if (actual_size != expected_size) {
+            throw std::logic_error("Invalid row length for triangular matrix! Row " +
+                std::to_string(i) + " expected size " +
+                std::to_string(expected_size) + ", got " +
+                std::to_string(actual_size));
+        }
+
+        MathVector<T> row(expected_size);
+
+        const T* list_begin = row_list.begin();
+        for (int j = 0; j < expected_size; ++j) {
+            row[j] = list_begin[j];
+        }
+
+        this->push_back(row);
         i++;
     }
+}
 
-    // Проверка на корректность ввода
-    if (_type == TriangleType::Upper) {
-        for (int i = 0; i < this->_rows; i++) {
-            int expected_size = this->_columns - i;
-            if ((*this)[i].size() != expected_size) throw std::logic_error("Invalid row length for upper triangular matrix!");
+template<class T>
+TriangleMatrix<T>::TriangleMatrix(const Matrix<T>& other) {
+    if (other.get_rows() == 0) throw std::logic_error("Matrix cannot be empty!");
+    if (other.get_rows() != other.get_columns()) throw std::logic_error("Matrix must be square!");
+
+    int size = other.get_rows();
+
+    T tolerance = T(1e-10);
+    bool has_upper_non_zero = false;
+    bool has_lower_non_zero = false;
+
+    Matrix<T> full_matrix(other);
+
+    for (int i = 0; i < size; i++) {
+        for (int j = i + 1; j < size; j++) {
+            if (std::abs(full_matrix[i][j]) > tolerance) has_upper_non_zero = true;
+            if (std::abs(full_matrix[j][i]) > tolerance) has_lower_non_zero = true;
+        }
+    }
+
+    TriangleType type;
+    if (!has_lower_non_zero && has_upper_non_zero) type = TriangleType::Upper;
+    else if (has_lower_non_zero && !has_upper_non_zero) type = TriangleType::Lower;
+    else if (!has_lower_non_zero && !has_upper_non_zero) type = TriangleType::Upper; // Диагональная
+    else throw std::logic_error("Matrix is not triangular! Has non-zero elements both above and below diagonal");
+
+    this->_rows = size;
+    this->_columns = size;
+    this->_type = type;
+
+    this->clear();
+
+    if (type == TriangleType::Upper) {
+        for (int i = 0; i < size; i++) {
+            MathVector<T> row(size - i);
+            for (int j = i; j < size; j++) {
+                row[j - i] = other[i][j];
+            }
+            this->push_back(row);
         }
     }
     else {
-        for (int i = 0; i < this->_rows; i++) {
-            int expected_size = i + 1;
-            if ((*this)[i].size() != expected_size) throw std::logic_error("Invalid row length for lower triangular matrix!");
+        for (int i = 0; i < size; i++) {
+            MathVector<T> row(i + 1);
+            for (int j = 0; j <= i; j++) {
+                row[j] = other[i][j];
+            }
+            this->push_back(row);
         }
     }
 }
 
 template<class T>
-TriangleMatrix<T>::TriangleMatrix(const TriangleMatrix<T>& other) : Matrix<T>(other), _type(other._type) {}
+TriangleMatrix<T>::TriangleMatrix(const TriangleMatrix<T>& other) : Matrix<T>(other.get_rows(), other.get_columns()), _type(other._type) {
+    if (_type == TriangleType::Upper) {
+        for (int i = 0; i < this->_rows; ++i) {
+            int row_size = this->_columns - i;
+            MathVector<T> row(row_size);
+
+            const MathVector<T>& other_row = other[i];
+            for (int j = 0; j < row_size; ++j) {
+                row[j] = other_row[j];
+            }
+
+            (*this)[i] = row;
+        }
+    }
+    else {
+        for (int i = 0; i < this->_rows; ++i) {
+            int row_size = i + 1;
+            MathVector<T> row(row_size);
+
+            const MathVector<T>& other_row = other[i];
+            for (int j = 0; j < row_size; ++j) {
+                row[j] = other_row[j];
+            }
+
+            (*this)[i] = row;
+        }
+    }
+}
 
 // Destructor //
 template<class T>
 TriangleMatrix<T>::~TriangleMatrix() {}
 
+// Getters //
+template<class T>
+TriangleType TriangleMatrix<T>::get_type() const noexcept { return _type; }
+
 // Functions //
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::add(const TriangleMatrix<T>& other) const {
     if (this->_rows != other._rows || this->_type != other._type) throw std::logic_error("Triangle matrices are not compatible for addition!");
+    
+    Matrix<T> new_this(*this);
+    Matrix<T> new_other(other);
 
-    TriangleMatrix<T> result(this->_rows, this->_type);
+    Matrix<T> result_matrix = new_this.add(new_other);
 
-    for (int i = 0; i < this->_rows; i++) {
-        result[i] = (*this)[i] + other[i];
-    }
-
-    return result;
+    return TriangleMatrix<T>(result_matrix);
 }
 
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::sub(const TriangleMatrix<T>& other) const {
     if (this->_rows != other._rows || this->_type != other._type) throw std::logic_error("Triangle matrices are not compatible for subtraction!");
 
-    TriangleMatrix<T> result(this->_rows, this->_type);
+    Matrix<T> new_this(*this);
+    Matrix<T> new_other(other);
 
-    for (int i = 0; i < this->_rows; i++) {
-        result[i] = (*this)[i] - other[i];
-    }
+    Matrix<T> result_matrix = new_this.sub(new_other);
 
-    return result;
+    return TriangleMatrix<T>(result_matrix);
 }
 
 template<class T>
@@ -173,107 +268,63 @@ TriangleMatrix<T> TriangleMatrix<T>::mult(const TriangleMatrix<T>& other) const 
     if (this->_type != other._type)
         throw std::logic_error("Triangle matrices must have the same type for multiplication!");
 
-    TriangleMatrix<T> result(this->_rows, this->_type);
+    Matrix<T> new_this(*this);
+    Matrix<T> new_other(other);
 
-    if (_type == TriangleType::Upper) {
-        for (int i = 0; i < this->_rows; i++) {
-            for (int j = i; j < this->_columns; j++) {
-                MathVector<T> row_part(j - i + 1);
-                MathVector<T> col_vec(j - i + 1);
+    Matrix<T> result_matrix = new_this.mult(new_other);
 
-                for (int k = 0; k <= j - i; k++)
-                    row_part[k] = (*this)[i][k];
-
-                for (int k = i; k <= j; k++)
-                    col_vec[k - i] = other[k][j - k];
-
-                result[i][j - i] = row_part * col_vec;
-            }
-        }
-    }
-
-    else {
-        for (int i = 0; i < this->_rows; i++) {
-            for (int j = 0; j <= i; j++) {
-                MathVector<T> row_part(i - j + 1);
-                MathVector<T> col_vec(i - j + 1);
-
-                for (int k = 0; k <= i - j; k++)
-                    row_part[k] = (*this)[i][k + j];
-
-                for (int k = j; k <= i; k++)
-                    col_vec[k - j] = other[k][j];
-
-                result[i][j] = row_part * col_vec;
-            }
-        }
-    }
-
-
-    return result;
+    return TriangleMatrix<T>(result_matrix);
 }
 
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::mult_by_number(const T& number) const {
-    TriangleMatrix<T> result(this->_rows, this->_type);
+    Matrix<T> new_this(*this);
 
-    for (int i = 0; i < this->_rows; i++) {
-        result[i] = (*this)[i] * number;
-    }
+    Matrix<T> result_matrix = new_this.mult_by_number(number);
 
-    return result;
+    return TriangleMatrix<T>(result_matrix);
 }
 
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::div_by_number(const T& number) const {
     if (number == T()) throw std::logic_error("Division by zero!");
 
-    TriangleMatrix<T> result(this->_rows, this->_type);
+    Matrix<T> new_this(*this);
 
-    for (int i = 0; i < this->_rows; i++) {
-        result[i] = (*this)[i] / number;
-    }
+    Matrix<T> result_matrix = new_this.div_by_number(number);
 
-    return result;
+    return TriangleMatrix<T>(result_matrix);
 }
 
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::transpose() const {
-    TriangleMatrix<T> result(this->_rows, this->_type == TriangleType::Upper ? TriangleType::Lower : TriangleType::Upper);
+    if (this->_rows == 0 || this->_columns == 0)  return TriangleMatrix<T>();
 
-    for (int i = 0; i < this->_rows; ++i) {
-        for (int j = 0; j < this->_rows; ++j) {
-            if (this->_type == TriangleType::Upper && j >= i) {
-                result(j, i) = (*this)(i, j);
-            }
-            else if (this->_type == TriangleType::Lower && j <= i) {
-                result(j, i) = (*this)(i, j);
-            }
-        }
-    }
+    Matrix<T> matrix(*this);
+    Matrix<T> transposed_matrix = matrix.Matrix<T>::transpose();
 
-    return result;
+    return TriangleMatrix<T>(transposed_matrix);
 }
 
 // Operators //
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator+(const TriangleMatrix<T>& other) const {
-    return this->add(other);
+    return this->TriangleMatrix<T>::add(other);
 }
 
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator-(const TriangleMatrix<T>& other) const {
-    return this->sub(other);
+    return this->TriangleMatrix<T>::sub(other);
 }
 
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator*(const TriangleMatrix<T>& other) const {
-    return this->mult(other);
+    return this->TriangleMatrix<T>::mult(other);
 }
 
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator*(const T& other) const {
-    return this->mult_by_number(other);
+    return this->TriangleMatrix<T>::mult_by_number(other);
 }
 
 template<class T>
@@ -283,7 +334,7 @@ TriangleMatrix<T> operator*(const T& other, const TriangleMatrix<T>& matrix) {
 
 template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator/(const T& other) const {
-    return this->div_by_number(other);
+    return this->TriangleMatrix<T>::div_by_number(other);
 }
 
 template<class T>
@@ -316,15 +367,27 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator/=(const T& other) {
     return *this;
 }
 
+//template<class T>
+//bool TriangleMatrix<T>::operator==(const TriangleMatrix<T>& other) const {
+//    if (this->_rows != other._rows || this->_type != other._type) return false;
+//
+//    for (int i = 0; i < this->_rows; i++) {
+//        if ((*this)[i] != other[i]) return false;
+//    }
+//
+//    return true;
+//}
+
+// ИЛИ
+
 template<class T>
 bool TriangleMatrix<T>::operator==(const TriangleMatrix<T>& other) const {
     if (this->_rows != other._rows || this->_type != other._type) return false;
 
-    for (int i = 0; i < this->_rows; i++) {
-        if ((*this)[i] != other[i]) return false;
-    }
+    Matrix<T> this_matrix(*this);
+    Matrix<T> other_matrix(other);
 
-    return true;
+    return this_matrix == other_matrix;
 }
 
 template<class T>
@@ -334,40 +397,17 @@ bool TriangleMatrix<T>::operator!=(const TriangleMatrix<T>& other) const {
 
 template<class T>
 std::ostream& operator<<(std::ostream& out, const TriangleMatrix<T>& matrix) {
-    for (int i = 0; i < matrix._rows; i++) {
-        if (matrix._type == TriangleType::Upper) {
-            for (int j = 0; j < i; j++) out << T() << " ";
-            for (int j = i; j < matrix._columns; j++) out << matrix[i][j - i] << " ";
-        }
-        else { 
-            for (int j = 0; j <= i; j++) out << matrix[i][j] << " ";
-            for (int j = i + 1; j < matrix._columns; j++) out << T() << " ";
-        }
-        out << std::endl;
-    }
+    out << Matrix<T>(matrix);
     return out;
 }
 
 template<class T>
 std::istream& operator>>(std::istream& in, TriangleMatrix<T>& matrix) {
-    for (int i = 0; i < matrix._rows; i++) {
-        if (matrix._type == TriangleType::Upper) {
-            for (int j = 0; j < i; j++) {
-                T tmp;
-                in >> tmp; 
-            }
-            for (int j = i; j < matrix._columns; j++) {
-                in >> matrix[i][j - i];
-            }
-        }
-        else {
-            for (int j = 0; j <= i; j++) in >> matrix[i][j];
-            for (int j = i + 1; j < matrix._columns; j++) {
-                T tmp;
-                in >> tmp;
-            }
-        }
-    }
+    Matrix<T> temp_matrix(matrix.get_rows(), matrix.get_columns());
+    in >> temp_matrix;
+
+    matrix = TriangleMatrix<T>(temp_matrix);
+
     return in;
 }
 
@@ -388,38 +428,4 @@ const MathVector<T>& TriangleMatrix<T>::operator[](int index) const {
     if (index < 0 || index >= this->_rows) throw std::out_of_range("Index out of range");
 
     return this->data()[index];
-}
-
-template<class T>
-T& TriangleMatrix<T>::operator()(int i, int j) {
-    if (i < 0 || i >= this->_rows || j < 0 || j >= this->_rows)
-        throw std::out_of_range("Index out of range");
-
-    if (this->_type == TriangleType::Upper) {
-        if (j < i)
-            throw std::out_of_range("Accessing element below upper triangle");
-        return this->data()[i][j - i]; // элементы в строках укорочены
-    }
-    else { // Lower
-        if (j > i)
-            throw std::out_of_range("Accessing element above lower triangle");
-        return this->data()[i][j]; // нижняя треугольная часть
-    }
-}
-
-template<class T>
-const T& TriangleMatrix<T>::operator()(int i, int j) const {
-    if (i < 0 || i >= this->_rows || j < 0 || j >= this->_rows)
-        throw std::out_of_range("Index out of range");
-
-    if (this->_type == TriangleType::Upper) {
-        if (j < i)
-            return T{}; // можно вернуть 0, если хочешь не выбрасывать исключение
-        return this->data()[i][j - i];
-    }
-    else {
-        if (j > i)
-            return T{};
-        return this->data()[i][j];
-    }
 }

@@ -6,6 +6,9 @@
 #include <initializer_list>
 #include <stdexcept>
 
+#include <cmath>     // для std::abs
+#include <type_traits> // для std::is_floating_point
+
 #include "..\lib_tvector\tvector.h"
 
 template<class T>
@@ -31,8 +34,6 @@ public:
 
     // Operators //
     using TVector<T>::operator[];
-    using TVector<T>::operator==;
-    using TVector<T>::operator!=;
     
     MathVector<T> operator+(const MathVector<T>&) const;
     MathVector<T> operator-(const MathVector<T>&) const;
@@ -44,6 +45,10 @@ public:
     MathVector<T>& operator-=(const MathVector<T>&);
     MathVector<T>& operator*=(const T&);
     MathVector<T>& operator/=(const T&);
+
+    bool operator==(const MathVector<T>&) const;
+    bool operator!=(const MathVector<T>&) const;
+
 };
 
 // Constructors //
@@ -173,4 +178,33 @@ template<class T>
 MathVector<T>& MathVector<T>::operator/=(const T& other) {
     *this = *this / other;
     return *this;
+}
+
+template<class T>
+bool MathVector<T>::operator==(const MathVector<T>& other) const {
+    if (this->size() != other.size()) return false;
+
+    if (this->size() == 0) return true;
+
+    // Сравнение для чисел float
+    if constexpr (std::is_floating_point<T>::value) {
+        T eps = static_cast<T>(1e-6); // погрешность
+        for (int i = 0; i < this->size(); ++i) {
+            if (std::abs((*this)[i] - other[i]) > eps)
+                return false;
+        }
+        return true;
+    }
+
+    else {
+        for (int i = 0; i < this->size(); ++i) {
+            if ((*this)[i] != other[i]) return false;
+        }
+        return true;
+    }
+}
+
+template<class T>
+bool MathVector<T>::operator!=(const MathVector<T>& other) const {
+    return !(*this == other);
 }

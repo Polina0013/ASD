@@ -13,7 +13,7 @@ TEST(TestTriangleMatrix, true_when_empty_constructor_and_upper_triangle_matrix) 
     TriangleMatrix<int> empty1, fake_empty_up(0, TriangleType::Upper);
 
     // Act & Assert
-    EXPECT_EQ(true, (empty1 == fake_empty_up));
+    EXPECT_EQ(empty1, fake_empty_up);
 }
 
 TEST(TestTriangleMatrix, false_when_empty_constructor_and_lower_triangle_matrix) {
@@ -21,7 +21,7 @@ TEST(TestTriangleMatrix, false_when_empty_constructor_and_lower_triangle_matrix)
     TriangleMatrix<int> empty1, fake_empty_low(0, TriangleType::Lower);
 
     // Act & Assert
-    EXPECT_EQ(false, (empty1 == fake_empty_low));
+    EXPECT_NE(empty1, fake_empty_low);
 }
 
 TEST(TestTriangleMatrix, size_constructor) {
@@ -29,7 +29,7 @@ TEST(TestTriangleMatrix, size_constructor) {
     TriangleMatrix<int> mat1(10, TriangleType::Upper), mat2(10, TriangleType::Upper);
 
     // Act & Assert
-    EXPECT_EQ(true, (mat1 == mat2));
+    EXPECT_EQ(mat1, mat2);
 }
 
 TEST(TestTriangleMatrix, init_from_mathvector_constructor_and_initializer_list_for_upper_triangle_matrix) {
@@ -54,7 +54,7 @@ TEST(TestTriangleMatrix, init_from_mathvector_constructor_and_initializer_list_f
     }, TriangleType::Upper);
 
     // Act & Assert
-    EXPECT_EQ(true, (mat1 == mat2));
+    EXPECT_EQ(mat1, mat2);
 }
 
 TEST(TestTriangleMatrix, init_from_mathvector_constructor_and_initializer_list_for_lower_triangle_matrix) {
@@ -79,7 +79,54 @@ TEST(TestTriangleMatrix, init_from_mathvector_constructor_and_initializer_list_f
     }, TriangleType::Lower);
 
     // Act & Assert
-    EXPECT_EQ(true, (mat1 == mat2));
+    EXPECT_EQ(mat1, mat2);
+}
+
+TEST(TestTriangleMatrix, TriangleMatrix_to_Matrix) {
+    // Arrange
+    TriangleMatrix<int> triangle_matrix({
+            {1},
+            {1, 2},
+            {1, 2, 3},
+            {1, 2, 3, 4}
+        }, TriangleType::Lower);
+
+    Matrix<int> result({
+           {1, 0, 0, 0},
+           {1, 2, 0, 0},
+           {1, 2, 3, 0},
+           {1, 2, 3, 4}
+        });
+
+    Matrix<int> matrix(triangle_matrix);
+
+    //std::cout << triangle_matrix << std::endl;
+    //std::cout << result << std::endl;
+
+   // Act & Assert
+    EXPECT_EQ(matrix, result);
+}
+
+TEST(TestTriangleMatrix, Matrix_to_TriangleMatrix) {
+    // Arrange
+    Matrix<int> matrix({
+        {1, 0, 0, 0},
+        {1, 2, 0, 0},
+        {1, 2, 3, 0},
+        {1, 2, 3, 4}
+    });
+    
+    TriangleMatrix<int> result({
+            {1},
+            {1, 2},
+            {1, 2, 3},
+            {1, 2, 3, 4}
+        }, TriangleType::Lower);
+
+    TriangleMatrix<int> triangle_matrix(matrix);
+
+   // Act & Assert
+    EXPECT_EQ(triangle_matrix, result);
 }
 
 TEST(TestTriangleMatrix, copy_constructor) {
@@ -95,7 +142,7 @@ TEST(TestTriangleMatrix, copy_constructor) {
     TriangleMatrix<int> mat2(mat1);
 
     // Assert
-    EXPECT_EQ(true, (mat1 == mat2));
+    EXPECT_EQ(mat1, mat2);
 }
 
 // Functions //
@@ -138,8 +185,10 @@ TEST(TestTriangleMatrix, add) {
         {2.0}
     }, TriangleType::Upper);
 
+    //std::cout << result;
+
     // Act & Assert
-    EXPECT_EQ(true, ((mat1 += mat2) == result));
+    EXPECT_EQ(mat1 += mat2, result);
 }
 
 TEST(TestTriangleMatrix, throw_error_when_subtracting_vectors_of_different_lengths) {
@@ -181,7 +230,7 @@ TEST(TestTriangleMatrix, sub) {
     }, TriangleType::Lower);
 
     // Act & Assert
-    EXPECT_EQ(true, ((mat1 -= mat2) == result));
+    EXPECT_EQ(mat1 -= mat2, result);
 }
 
 TEST(TestTriangleMatrix, throw_error_when_matrix_dimensions_do_not_match_for_mult) {
@@ -222,7 +271,7 @@ TEST(TestTriangleMatrix, mult_matrix_by_matrix) {
             }, TriangleType::Upper);
 
     // Act & Assert
-    EXPECT_EQ(true, ((mat1 *= mat2) == result));
+    EXPECT_EQ(mat1 *= mat2, result);
 }
 
 TEST(TestTriangleMatrix, mult_matrix_by_number) {
@@ -239,7 +288,7 @@ TEST(TestTriangleMatrix, mult_matrix_by_number) {
             }, TriangleType::Lower);
 
     // Act & Assert
-    EXPECT_EQ(true, ((matrix *= 5) == result));
+    EXPECT_EQ(matrix *= 5, result);
 }
 
 TEST(TestTriangleMatrix, mult_number_by_matrix) {
@@ -256,7 +305,7 @@ TEST(TestTriangleMatrix, mult_number_by_matrix) {
             }, TriangleType::Lower);
 
     // Act & Assert
-    EXPECT_EQ(true, ((5 * matrix) == result));
+    EXPECT_EQ(5 * matrix, result);
 }
 
 TEST(TestTriangleMatrix, div_by_number) {
@@ -272,7 +321,7 @@ TEST(TestTriangleMatrix, div_by_number) {
             {1, 2, 3}
             }, TriangleType::Lower);
     // Act & Assert
-    EXPECT_EQ(true, ((matrix / 5) == result));
+    EXPECT_EQ(matrix / 5, result);
 }
 
 TEST(TestTriangleMatrix, transpose) {
@@ -292,7 +341,7 @@ TEST(TestTriangleMatrix, transpose) {
             {5}
         }, TriangleType::Upper);
     // Act & Assert
-    EXPECT_EQ(true, ((matrix.transpose()) == result));
+    EXPECT_EQ(matrix.transpose(), result);
 }
 
 #endif // TEST_TRIANGLEMATRIX

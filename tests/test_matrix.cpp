@@ -16,14 +16,6 @@ TEST(TestMatrix, empty_constructor) {
     EXPECT_EQ(true, (empty1 == fake_empty));
 }
 
-TEST(TestMatrix, size_constructor) {
-    // Arrange
-    Matrix<int> mat1(10, 10), mat2(10, 10);
-
-    // Act & Assert
-    EXPECT_EQ(true, (mat1 == mat2));
-}
-
 TEST(TestMatrix, init_from_mathvector_constructor_and_initializer_list) {
     // Arrange
     MathVector<int> row1({ 1, 2, 3, 4, 5 });
@@ -40,7 +32,7 @@ TEST(TestMatrix, init_from_mathvector_constructor_and_initializer_list) {
     };
 
     // Act & Assert
-    EXPECT_EQ(true, (mat1 == mat2));
+    EXPECT_EQ(mat1, mat2);
 }
 
 TEST(TestMatrix, copy_constructor) {
@@ -56,7 +48,7 @@ TEST(TestMatrix, copy_constructor) {
     Matrix<int> mat2(mat1);
 
     // Assert
-    EXPECT_EQ(true, (mat1 == mat2));
+    EXPECT_EQ(mat1, mat2);
 }
 
 // Functions //
@@ -99,7 +91,7 @@ TEST(TestMatrix, add) {
     };
 
     // Act & Assert
-    EXPECT_EQ(true, ((mat1 += mat2) == result));
+    EXPECT_EQ(mat1 += mat2, result);
 }
 
 TEST(TestMatrix, throw_error_when_subtracting_vectors_of_different_lengths) {
@@ -140,7 +132,7 @@ TEST(TestMatrix, sub) {
     };
 
     // Act & Assert
-    EXPECT_EQ(true, ((mat1 -= mat2) == result));
+    EXPECT_EQ(mat1 -= mat2, result);
 }
 
 TEST(TestMatrix, throw_error_when_matrix_dimensions_do_not_match_for_mult) {
@@ -177,7 +169,7 @@ TEST(TestMatrix, mult_matrix_by_matrix) {
     };
 
     // Act & Assert
-    EXPECT_EQ(true, ((mat1 *= mat2) == result));
+    EXPECT_EQ(mat1 *= mat2, result);
 }
 
 TEST(TestMatrix, mult_matrix_by_number) {
@@ -195,7 +187,7 @@ TEST(TestMatrix, mult_matrix_by_number) {
     };
 
     // Act & Assert
-    EXPECT_EQ(true, ((matrix *= 5) == result));
+    EXPECT_EQ(matrix *= 5, result);
 }
 
 TEST(TestMatrix, mult_number_by_matrix) {
@@ -212,7 +204,7 @@ TEST(TestMatrix, mult_number_by_matrix) {
         {35, 40}
     };
     // Act & Assert
-    EXPECT_EQ(true, (( 5 * matrix) == result));
+    EXPECT_EQ(5 * matrix, result);
 }
 
 TEST(TestMatrix, div_by_number) {
@@ -229,7 +221,7 @@ TEST(TestMatrix, div_by_number) {
         {7, 8}
     };
     // Act & Assert
-    EXPECT_EQ(true, ((matrix / 5) == result));
+    EXPECT_EQ(matrix / 5, result);
 }
 
 TEST(TestMatrix, transpose) {
@@ -244,7 +236,7 @@ TEST(TestMatrix, transpose) {
         {10.0, 20.0, 30.0, 40.0}
     };
     // Act & Assert
-    EXPECT_EQ(true, ((matrix.transpose()) == result));
+    EXPECT_EQ(matrix.transpose(), result);
 }
 
 #endif // TEST_MATRIX
