@@ -13,6 +13,7 @@ class Stack {
 public:
     // Constructors //
     Stack();
+//    explicit Stack(size_t max_size);
     Stack(std::initializer_list<T> init);
     Stack(const Stack& other);
 
@@ -24,7 +25,7 @@ public:
     void pop();
     inline T top() const;
     inline bool is_empty() const noexcept;
-    inline bool is_full() const noexcept;
+//    inline bool is_full() const noexcept;
     void clear() noexcept;
 
     // Operators //
@@ -32,12 +33,16 @@ public:
     bool operator!=(const Stack& other) const;
 
     Stack& operator=(const Stack& other);
-    Stack& operator=(Stack&& other) noexcept;
 };
 
 // Constructors //
 template<class T>
 Stack<T>::Stack() : _data() {}
+
+//template<class T>
+//Stack<T>::Stack(size_t max_size) : _data(max_size) {
+//    if (max_size == 0) throw std::logic_error("Capacity must be positive");
+//}
 
 template<class T>
 Stack<T>::Stack(std::initializer_list<T> init) {
@@ -56,7 +61,7 @@ Stack<T>::~Stack() {}
 // Functions //
 template<class T>
 void Stack<T>::push(const T& val) {
-    if (is_full()) { throw std::logic_error("Cannot push to full stack"); }
+    //if (is_full()) { throw std::logic_error("Cannot push to full stack"); }
     _data.push_back(val);
 }
 
@@ -77,10 +82,10 @@ inline bool Stack<T>::is_empty() const noexcept {
     return _data.is_empty();
 }
 
-template<class T>
-inline bool Stack<T>::is_full() const noexcept {
-    return _data.is_full();
-}
+//template<class T>
+//inline bool Stack<T>::is_full() const noexcept {
+//    return _data.is_full();
+//}
 
 template<class T>
 void Stack<T>::clear() noexcept {
@@ -92,14 +97,6 @@ template<class T>
 Stack<T>& Stack<T>::operator=(const Stack& other) {
     if (this != &other) {
         _data = other._data;
-    }
-    return *this;
-}
-
-template<class T>
-Stack<T>& Stack<T>::operator=(Stack&& other) noexcept {
-    if (this != &other) {
-        _data = std::move(other._data);
     }
     return *this;
 }

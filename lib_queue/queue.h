@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <stdexcept>
-#include "..\lib_tvector\tvector.h"
 
 #define STANDARD_SIZE 15
 
@@ -22,6 +21,8 @@ public:
     Queue(std::initializer_list<T> init);
     Queue(const Queue& other);
 
+    ~Queue();
+
     size_t get_head() const;
     size_t get_tail() const;
     size_t get_count() const;
@@ -37,7 +38,6 @@ public:
 
     bool operator==(const Queue<T>& other) const;
     Queue& operator=(const Queue& other);
-    Queue& operator=(Queue&& other) noexcept;
 };
 
 // Constructors //
@@ -68,6 +68,12 @@ Queue<T>::Queue(const Queue& other) : _head(other._head), _tail(other._tail), _c
     for (size_t i = 0; i < _max_size; i++) {
         _data[i] = other._data[i];
     }
+}
+
+// Destructor //
+template<class T>
+Queue<T>::~Queue() {
+    delete[] _data;
 }
 
 template<class T>
@@ -152,27 +158,6 @@ Queue<T>& Queue<T>::operator=(const Queue& other) {
         _head = other._head;
         _tail = other._tail;
         _count = other._count;
-    }
-    return *this;
-}
-
-template<class T>
-Queue<T>& Queue<T>::operator=(Queue&& other) noexcept {
-    if (this != &other) {
-        if (_max_size != other._max_size) {
-            throw std::logic_error("Cannot assign queues with different capacities");
-        }
-
-        delete[] _data;
-        _data = other._data;
-        _head = other._head;
-        _tail = other._tail;
-        _count = other._count;
-
-        other._data = nullptr;
-        other._head = 0;
-        other._tail = 0;
-        other._count = 0;
     }
     return *this;
 }

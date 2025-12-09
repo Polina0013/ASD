@@ -11,7 +11,7 @@ TEST(TestCheckBreckets, simple_true_string) {
     std::string str = "()()";
 
     // Act & Assert
-    EXPECT_EQ(true, check_breckets(str));
+    EXPECT_TRUE(check_breckets(str));
 }
 
 TEST(TestCheckBreckets, complex_true_string) {
@@ -19,7 +19,7 @@ TEST(TestCheckBreckets, complex_true_string) {
     std::string str = "[(()())(())]";
 
     // Act & Assert
-    EXPECT_EQ(true, check_breckets(str));
+    EXPECT_TRUE(check_breckets(str));
 }
 
 TEST(TestCheckBreckets, false_when_one_parenthesis_without_closing_pair) {
@@ -27,7 +27,7 @@ TEST(TestCheckBreckets, false_when_one_parenthesis_without_closing_pair) {
     std::string str = "(()()";
 
     // Act & Assert
-    EXPECT_EQ(false, check_breckets(str));
+    EXPECT_FALSE(check_breckets(str));
 }
 
 TEST(TestCheckBreckets, false_when_one_parenthesis_without_opening_pair) {
@@ -35,7 +35,7 @@ TEST(TestCheckBreckets, false_when_one_parenthesis_without_opening_pair) {
     std::string str = "())(())";
 
     // Act & Assert
-    EXPECT_EQ(false, check_breckets(str));
+    EXPECT_FALSE(check_breckets(str));
 }
 
 TEST(TestCheckBreckets, false_when_types_of_brackets_do_not_match) {
@@ -43,8 +43,17 @@ TEST(TestCheckBreckets, false_when_types_of_brackets_do_not_match) {
     std::string str = "({)}";
 
     // Act & Assert
-    EXPECT_EQ(false, check_breckets(str));
+    EXPECT_FALSE(check_breckets(str));
 }
 
+TEST(TestCheckBreckets, print_without_spaces) {
+    // Arrange
+    std::string str = "(   5   67678   /-  *-+  {)  }";
+
+    read_expression(str);
+
+    // Act & Assert
+    //EXPECT_TRUE(read_expression(str));
+}
 
 #endif //TEST_ALGORITHMS
