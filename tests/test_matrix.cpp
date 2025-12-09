@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include "../lib_matrix/matrix.h"
 
-//#define TEST_MATRIX
+#define TEST_MATRIX
 #ifdef TEST_MATRIX
 
 // Constructors //

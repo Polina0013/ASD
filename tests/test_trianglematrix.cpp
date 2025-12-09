@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include "../lib_trianglematrix/trianglematrix.h"
 
-//#define TEST_TRIANGLEMATRIX
+#define TEST_TRIANGLEMATRIX
 #ifdef TEST_TRIANGLEMATRIX
 
 // Constructors //

@@ -241,12 +241,11 @@ template<class T>
 TriangleMatrix<T> TriangleMatrix<T>::add(const TriangleMatrix<T>& other) const {
     if (this->_rows != other._rows || this->_type != other._type) throw std::logic_error("Triangle matrices are not compatible for addition!");
     
-    Matrix<T> new_this(*this);
-    Matrix<T> new_other(other);
+    TriangleMatrix<T> result(*this);
 
-    Matrix<T> result_matrix = new_this.add(new_other);
+    result.Matrix<T>::operator+=(other);
 
-    return TriangleMatrix<T>(result_matrix);
+    return result;
 }
 
 template<class T>
