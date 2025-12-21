@@ -1,23 +1,22 @@
 // Copyright 2025 Polina Pozdnova
 
 #include <gtest/gtest.h>
-#include "..\lib_list\list.h"
+#include "..\lib_stack_via_list\stack_via_list.h"
 
-#define TEST_LIST
-#ifdef TEST_LIST
+#define TEST_STACK_VIA_LIST
+#ifdef TEST_STACK_VIA_LIST
 
-TEST(TestList, default_constructor) {
-    // Arrange
-    List<int> l1, l2;
-
-    // Act
-    l1.push_back(2);
-    l1.pop_front();
-
-    // Assert
-    EXPECT_EQ(l1, l2);
-}
-
+//TEST(TestStackViaList, default_constructor) {
+//    // Arrange
+//    List<int> l1, l2;
+//
+//    // Act
+//    l1.push_back(2);
+//    l1.pop_front();
+//
+//    // Assert
+//    EXPECT_EQ(l1, l2);
+//}
 
 //TEST(TestList, copy_constructor) {
 //    // Arrange
@@ -81,4 +80,4 @@ TEST(TestList, default_constructor) {
 //    EXPECT_EQ(s1.top(), 2.0);
 //}
 
-#endif // TEST_LIST
+#endif // TEST_STACK_VIA_LIST

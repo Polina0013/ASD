@@ -9,22 +9,28 @@ project(Algorithms-and-Data-Structures)
 
 # затем следует список инструкций для подключения проектов из подкаталогов
 
-include(cmake/function.cmake)         # подхватываем функции, реализованные в файле function.cmake
-                                      # для простоты мы объединили наборы команд для создания статической библиотеки
-								      # и для создания исполняемого проекта в отдельные функции
+include(cmake/function.cmake)               # подхватываем функции, реализованные в файле function.cmake
+                                            # для простоты мы объединили наборы команд для создания статической библиотеки
+					    			# и для создания исполняемого проекта в отдельные функции
 
-add_subdirectory(lib_easy_example)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
-add_subdirectory(lib_tvector)         # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tvector
-add_subdirectory(lib_stack)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack
-add_subdirectory(lib_queue)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue
-add_subdirectory(lib_list)            # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_list
-add_subdirectory(algorithms)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем algorithms
+add_subdirectory(lib_easy_example)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
+add_subdirectory(lib_tvector)               # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tvector
+add_subdirectory(lib_stack)                 # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack
+add_subdirectory(lib_queue)                 # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue
+add_subdirectory(lib_list)                  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_list
+add_subdirectory(lib_doubly_linked_list)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_doubly_linked_list
+add_subdirectory(algorithms)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем algorithms
 
-add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+add_subdirectory(lib_stack_via_list)        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack_via_list
+add_subdirectory(lib_queue_via_list)        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue_via_list
 
-option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
+add_subdirectory(lib_dsu)                   # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_dsu
 
-if(BTEST)                             # если тесты подключены         
+add_subdirectory(main)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+
+option(BTEST "build test?" ON)              # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
+
+if(BTEST)                                   # если тесты подключены         
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     add_subdirectory("third_party/gtest" EXCLUDE_FROM_ALL)
     enable_testing()
