@@ -13,19 +13,22 @@ include(cmake/function.cmake)               # подхватываем функ�
                                             # для простоты мы объединили наборы команд для создания статической библиотеки
 					    			# и для создания исполняемого проекта в отдельные функции
 
-add_subdirectory(lib_easy_example)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
-add_subdirectory(lib_tvector)               # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tvector
-add_subdirectory(lib_stack)                 # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack
-add_subdirectory(lib_queue)                 # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue
-add_subdirectory(lib_list)                  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_list
-add_subdirectory(lib_doubly_linked_list)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_doubly_linked_list
-add_subdirectory(algorithms)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем algorithms
+add_subdirectory(lib_easy_example)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_easy_example
+add_subdirectory(lib_tvector)                     # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_tvector
+add_subdirectory(lib_stack)                       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack
+add_subdirectory(lib_queue)                       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue
+add_subdirectory(lib_list)                        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_list
+add_subdirectory(lib_doubly_linked_list)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_doubly_linked_list
+add_subdirectory(algorithms)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем algorithms
 
-add_subdirectory(lib_stack_via_list)        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack_via_list
-add_subdirectory(lib_queue_via_list)        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue_via_list
+add_subdirectory(lib_stack_via_list)              # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack_via_list
+add_subdirectory(lib_queue_via_list)              # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue_via_list
 
-add_subdirectory(lib_dsu)                   # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_dsu
-add_subdirectory(maze_on_dsu)               # подключаем дополнительный CMakeLists.txt из подкаталога с именем maze_on_dsu
+add_subdirectory(lib_dsu)                         # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_dsu
+add_subdirectory(maze_on_dsu)                     # подключаем дополнительный CMakeLists.txt из подкаталога с именем maze_on_dsu
+
+add_subdirectory(lib_itable)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_itable
+add_subdirectory(lib_unordered_table_on_array)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_unordered_table_on_array
 
 add_subdirectory(main)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
