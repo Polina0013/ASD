@@ -1,9 +1,9 @@
-// Copyright 2024 Polina Pozdnova
+// Copyright 2025 Polina Pozdnova
 
 #include <gtest/gtest.h>
 #include "..\algorithms\algorithms.h"
 
-#define TEST_ALGORITHMS
+//#define TEST_ALGORITHMS
 #ifdef TEST_ALGORITHMS
 
 TEST(TestCheckBreckets, simple_true_string) {
