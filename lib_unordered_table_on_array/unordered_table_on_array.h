@@ -17,7 +17,7 @@ public:
     ~UnsortedTableOnArr() override = default;
 
     void insert(const TKey&, const TValue&) override;
-    void erase(const TKey&) override;             // проверить std::pair на удаление по ключу использу€ == (адаптировать по надобности), если нет то писать TPair
+    void erase(const TKey&) override;
     TValue& find(const TKey&) override;
     const TValue& find(const TKey&) const override;
 

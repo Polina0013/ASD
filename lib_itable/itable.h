@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-template <class TKey, class TValue>  // конструкторов нет
+template <class TKey, class TValue>
 class ITable {
 public:
     virtual ~ITable() = default;
