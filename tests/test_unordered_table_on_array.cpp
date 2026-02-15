@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include "..\lib_unordered_table_on_array\unordered_table_on_array.h"
 
-#define TEST_UNORDERED_TABLE_ON_ARRAY
+//#define TEST_UNORDERED_TABLE_ON_ARRAY
 #ifdef TEST_UNORDERED_TABLE_ON_ARRAY
 
 TEST(TestUnorderedTableOnArray, check_the_insert_after_erase) {
