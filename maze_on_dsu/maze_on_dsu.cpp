@@ -1,3 +1,3 @@
-// Copyright 2025 Pozdnova Polina
+// Copyright 2026 Pozdnova Polina
 
-#include "..\algorithms\algorithms.h"
+#include "..\maze_on_dsu\maze_on_dsu.h"
