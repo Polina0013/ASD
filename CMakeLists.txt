@@ -19,6 +19,8 @@ add_subdirectory(lib_stack)                       # подключаем доп�
 add_subdirectory(lib_queue)                       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_queue
 add_subdirectory(lib_list)                        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_list
 add_subdirectory(lib_doubly_linked_list)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_doubly_linked_list
+add_subdirectory(lib_skip_list)                   # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_skip_list
+
 add_subdirectory(algorithms)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем algorithms
 
 add_subdirectory(lib_stack_via_list)              # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_stack_via_list
@@ -28,7 +30,10 @@ add_subdirectory(lib_dsu)                         # подключаем доп�
 add_subdirectory(maze_on_dsu)                     # подключаем дополнительный CMakeLists.txt из подкаталога с именем maze_on_dsu
 
 add_subdirectory(lib_itable)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_itable
-add_subdirectory(lib_unordered_table_on_array)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_unordered_table_on_array
+add_subdirectory(lib_table)                       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_table
+add_subdirectory(lib_unsorted_table_on_vector)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_unsorted_table_on_vector
+add_subdirectory(lib_unsorted_table_on_list)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_unsorted_table_on_list
+add_subdirectory(lib_sorted_table_on_vector)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_sorted_table_on_vector
 
 add_subdirectory(main)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 

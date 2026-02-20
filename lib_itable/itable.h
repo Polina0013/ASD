@@ -15,10 +15,4 @@ public:
     virtual TValue& find(const TKey&) = 0;
     virtual const TValue& find(const TKey&) const = 0;
     virtual bool is_empty() const noexcept = 0;
-    virtual void print(std::ostream& out) const = 0;
-
-    friend std::ostream& operator<<(std::ostream& out, const ITable& table) {
-        table.print(out);
-        return out;
-    }
 };
