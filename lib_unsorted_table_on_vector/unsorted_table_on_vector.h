@@ -29,7 +29,7 @@ template <class TKey, class TValue>
 void UnsortedTableOnVector<TKey, TValue>::insert(const TKey& key, const TValue& value) {
     bool isUnic = true;
     for (int i = 0; i < _rows.size(); i++) {
-        if (_rows[i].first == key) isUnic = false;
+        if (_rows[i].first == key) { isUnic = false; break; }
     }
     if (isUnic) _rows.push_back(std::make_pair(key, value));
     else throw std::logic_error("The key is not unique!");
