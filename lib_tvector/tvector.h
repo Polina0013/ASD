@@ -14,6 +14,12 @@
 
 enum State { empty, busy, deleted };
 
+template<typename T1, typename T2>
+std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& p) {
+    os << "(" << p.first << ", " << p.second << ")";
+    return os;
+}
+
 template<class T>
 class TVector {
 protected:
@@ -297,12 +303,40 @@ void TVector<T>::real_output() const {
 template<class T> void TVector<T>::push_front(const T& value) {
     if (_size == 0) {
         _size = 1;
-        reserve(CAPACITY);
         _data[0] = value;
         _states[0] = busy;
         return;
     }
-    else {
+
+    int first_busy = -1;
+    for (int i = 0; i < _size; i++) {
+        if (_states[i] == busy) {
+            first_busy = i;
+            break;
+        }
+    }
+    if (first_busy > 0) {
+        _data[first_busy - 1] = value;
+        _states[first_busy - 1] = busy;
+        if (first_busy - 1 == _size) {
+            _size++;
+        }
+        return;
+    }
+
+    if (_size >= _capacity) {
+        reserve(_capacity + CAPACITY);
+    }
+
+    for (int i = _size; i > 0; i--) {
+        _data[i] = _data[i - 1];
+        _states[i] = _states[i - 1];
+    }
+    _data[0] = value;
+    _states[0] = busy;
+    _size++;
+
+    /*else {
         int index_first_busy = -1;
         int index_first_deleted_or_empty = -1;
         for (int i = 0; i < _size; i++) {
@@ -331,7 +365,7 @@ template<class T> void TVector<T>::push_front(const T& value) {
             if (_states[index_first_busy - 1] == deleted) _deleted--;
             _states[index_first_busy - 1] = busy;
         }
-    }
+    }*/
 }
 
 template<class T>
@@ -342,6 +376,23 @@ void TVector<T>::push_back(const T& value) {
     _states[_size] = busy;
     _size++;
 }
+
+//template<class T>
+//void TVector<T>::push_back(const T& value) {
+//    std::cout << "    TVector::push_back(" << value << ")" << std::endl;
+//    std::cout << "      Before: _size=" << _size << ", _capacity=" << _capacity << std::endl;
+//
+//    if (is_full()) {
+//        std::cout << "      Vector full, calling reserve(" << _size + CAPACITY << ")" << std::endl;
+//        reserve(_size + CAPACITY);
+//    }
+//
+//    _data[_size] = value;
+//    _states[_size] = busy;
+//    _size++;
+//
+//    std::cout << "      After: _size=" << _size << ", _capacity=" << _capacity << std::endl;
+//}
 
 template<class T>
 void TVector<T>::insert(int index, const T& value) {
@@ -387,6 +438,61 @@ void TVector<T>::insert(int index, const T& value) {
     _data[insert_pos] = value;
     _states[insert_pos] = busy;
 }
+
+/*template<class T>
+void TVector<T>::insert(int index, const T& value) {
+    std::cout << "  TVector::insert(index=" << index << ", value=" << value << ")" << std::endl;
+    std::cout << "    Before: _size=" << _size << ", _capacity=" << _capacity << ", _deleted=" << _deleted << std::endl;
+
+    if (index > size() || index < 0) {
+        std::cout << "    ERROR: index out of range" << std::endl;
+        throw std::logic_error("Index out of range");
+    }
+
+    if (index == 0) {
+        std::cout << "    Calling push_front" << std::endl;
+        push_front(value);
+        return;
+    }
+
+    if (index == size()) {
+        std::cout << "    Calling push_back" << std::endl;
+        push_back(value);
+        return;
+    }
+
+    if (is_full()) {
+        std::cout << "    Vector is full, reserving more space" << std::endl;
+        reserve(_capacity + CAPACITY);
+    }
+
+    // Находим реальную позицию для вставки
+    int busy_count = 0;
+    int insert_pos = 0;
+    std::cout << "    Finding real position for logical index " << index << std::endl;
+
+    while (insert_pos < _size && busy_count < index) {
+        if (_states[insert_pos] == busy) {
+            busy_count++;
+        }
+        insert_pos++;
+    }
+    std::cout << "    Real insert position: " << insert_pos << std::endl;
+
+    // Сдвигаем элементы
+    std::cout << "    Shifting elements from " << _size << " to " << insert_pos << std::endl;
+    for (int i = _size; i > insert_pos; i--) {
+        _data[i] = _data[i - 1];
+        _states[i] = _states[i - 1];
+    }
+
+    // Вставляем новый элемент
+    _data[insert_pos] = value;
+    _states[insert_pos] = busy;
+    _size++;
+
+    std::cout << "    After: _size=" << _size << ", _capacity=" << _capacity << ", _deleted=" << _deleted << std::endl;
+}*/
 
 
 // Deletion functions //
@@ -489,6 +595,52 @@ template<class T> void TVector<T>::reserve(int new_capacity) {
         _capacity = new_capacity;
     }
 }
+
+/*template<class T>
+void TVector<T>::reserve(int new_capacity) {
+    std::cout << "      TVector::reserve(" << new_capacity << ")" << std::endl;
+    std::cout << "        Current capacity: " << _capacity << std::endl;
+
+    if (new_capacity > _capacity) {
+        std::cout << "        Allocating new arrays of size " << new_capacity << std::endl;
+
+        T* new_data = nullptr;
+        State* new_states = nullptr;
+
+        try {
+            new_data = new T[new_capacity];
+            new_states = new State[new_capacity];
+        }
+        catch (const std::bad_alloc& e) {
+            std::cout << "        BAD ALLOCATION EXCEPTION!" << std::endl;
+            throw;
+        }
+
+        std::cout << "        Copying " << _capacity << " elements" << std::endl;
+        for (int i = 0; i < _capacity; i++) {
+            new_data[i] = _data[i];
+            new_states[i] = _states[i];
+        }
+
+        std::cout << "        Initializing remaining " << (new_capacity - _capacity) << " elements as empty" << std::endl;
+        for (int i = _capacity; i < new_capacity; i++) {
+            new_states[i] = empty;
+        }
+
+        std::cout << "        Deleting old arrays" << std::endl;
+        delete[] _data;
+        delete[] _states;
+
+        _data = new_data;
+        _states = new_states;
+        _capacity = new_capacity;
+
+        std::cout << "        Reserve complete, new capacity: " << _capacity << std::endl;
+    }
+    else {
+        std::cout << "        No resize needed" << std::endl;
+    }
+}*/
 
 // Перезаписать без get_deleted (Изменить size, перевыделить capacity только в одном случае)
 template<class T> void TVector<T>::resize(int new_size) {
