@@ -11,8 +11,10 @@ template <class TKey, class TValue>
 class Table : public ITable<TKey, TValue>{
 public:
     virtual void print(std::ostream& out) const = 0;
-    friend std::ostream& operator<<(std::ostream& out, const ITable& table) {
-        table.print(out);
-        return out;
-    }
 };
+
+template <class TKey, class TValue>
+std::ostream& operator<<(std::ostream& out, const Table<TKey, TValue>& table) {
+    table.print(out);
+    return out;
+}

@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include "..\lib_unsorted_table_on_vector\unsorted_table_on_vector.h"
 
-#define TEST_UNSORTED_TABLE_ON_VECTOR
+//#define TEST_UNSORTED_TABLE_ON_VECTOR
 #ifdef TEST_UNSORTED_TABLE_ON_VECTOR
 
 TEST(TestUnsortedTableOnVector, the_exception_is_when_insert_not_a_unique_key) {
@@ -13,7 +13,7 @@ TEST(TestUnsortedTableOnVector, the_exception_is_when_insert_not_a_unique_key) {
     t1.insert(2, "Second");
     t1.insert(3, "Third");
 
-    //std::cout << t1;
+    std::cout << t1;
 
     ASSERT_ANY_THROW(t1.insert(3, "Third"));
 }

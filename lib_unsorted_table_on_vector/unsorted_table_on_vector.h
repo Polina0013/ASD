@@ -48,7 +48,7 @@ void UnsortedTableOnVector<TKey, TValue>::erase(const TKey& key) {
 
 template <class TKey, class TValue>
 TValue& UnsortedTableOnVector<TKey, TValue>::find(const TKey& key) {
-    for (int i = 0; i < _rows.size(); ++i) {
+    for (int i = 0; i < _rows.size(); i++) {
         if (_rows[i].first == key) {
             return _rows[i].second;
         }
@@ -58,7 +58,7 @@ TValue& UnsortedTableOnVector<TKey, TValue>::find(const TKey& key) {
 
 template <class TKey, class TValue>
 const TValue& UnsortedTableOnVector<TKey, TValue>::find(const TKey& key) const {
-    for (int i = 0; i < _rows.size(); ++i) {
+    for (int i = 0; i < _rows.size(); i++) {
         if (_rows[i].first == key) {
             return _rows[i].second;
         }

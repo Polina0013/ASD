@@ -24,22 +24,22 @@ public:
     bool is_empty() const noexcept override;
     void print(std::ostream& out) const override;
 };
-/*
+
 template <class TKey, class TValue>
-void UnsortedTableOnVector<TKey, TValue>::insert(const TKey& key, const TValue& value) {
+void UnsortedTableOnList<TKey, TValue>::insert(const TKey& key, const TValue& value) {
     bool isUnic = true;
-    for (int i = 0; i < _rows.size(); i++) {
-        if (_rows[i].first == key) isUnic = false;
+    for (auto it = _rows.begin(); it != _rows.end(); it++) {
+        if (it->first == key) { isUnic = false; break; }
     }
     if (isUnic) _rows.push_back(std::make_pair(key, value));
     else throw std::logic_error("The key is not unique!");
 }
 
 template <class TKey, class TValue>
-void UnsortedTableOnVector<TKey, TValue>::erase(const TKey& key) {
-    for (int i = 0; i < _rows.size(); i++) {
-        if (_rows[i].first == key) {
-            _rows.erase(i);
+void UnsortedTableOnList<TKey, TValue>::erase(const TKey& key) {
+    for (auto it = _rows.begin(); it != _rows.end(); it++) {
+        if (it->first == key) {
+            _rows.erase(it.get_node());
             return;
         }
     }
@@ -47,35 +47,34 @@ void UnsortedTableOnVector<TKey, TValue>::erase(const TKey& key) {
 }
 
 template <class TKey, class TValue>
-TValue& UnsortedTableOnVector<TKey, TValue>::find(const TKey& key) {
-    for (int i = 0; i < _rows.size(); ++i) {
-        if (_rows[i].first == key) {
-            return _rows[i].second;
+TValue& UnsortedTableOnList<TKey, TValue>::find(const TKey& key) {
+    for (auto it = _rows.begin(); it != _rows.end(); it++) {
+        if (it->first == key) {
+            return it->second;
         }
     }
     throw std::logic_error("Key not found!");
 }
 
 template <class TKey, class TValue>
-const TValue& UnsortedTableOnVector<TKey, TValue>::find(const TKey& key) const {
-    for (int i = 0; i < _rows.size(); ++i) {
-        if (_rows[i].first == key) {
-            return _rows[i].second;
+const TValue& UnsortedTableOnList<TKey, TValue>::find(const TKey& key) const {
+    for (auto it = _rows.begin(); it != _rows.end(); it++) {
+        if (it->first == key) {
+            return it->second;
         }
     }
     throw std::logic_error("Key not found!");
 }
 
 template <class TKey, class TValue>
-bool UnsortedTableOnVector<TKey, TValue>::is_empty() const noexcept {
+bool UnsortedTableOnList<TKey, TValue>::is_empty() const noexcept {
     return _rows.is_empty();
 }
 
 template <class TKey, class TValue>
-void UnsortedTableOnVector<TKey, TValue>::print(std::ostream& out) const {
-    out << "UnsortedTableOnVector: \n";
-    for (int i = 0; i < _rows.size(); i++) {
-        out << "| " << _rows[i].first << " | " << _rows[i].second << " |\n";
+void UnsortedTableOnList<TKey, TValue>::print(std::ostream& out) const {
+    out << "UnsortedTableOnList: \n";
+    for (auto it = _rows.begin(); it != _rows.end(); it++) {
+        out << "| " << it->first << " | " << it->second << " |\n";
     }
 }
-*/
