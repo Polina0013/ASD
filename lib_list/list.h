@@ -30,6 +30,7 @@ public:
     T& front();
     T& back();
     bool is_empty();
+    bool is_empty() const;
     void push_front(const T&);
     void push_back(const T&);
     void insert_after(size_t, const T&);
@@ -50,6 +51,10 @@ public:
     public:
         Iterator() : _current(nullptr) {}
         Iterator(Node<T>* node) : _current(node) {}
+
+        Node<T>* get_node() const {
+            return _current;
+        }
 
         Iterator& operator=(const Iterator& other) noexcept {
             _current = other._current;
@@ -97,6 +102,9 @@ public:
     Iterator begin() { return Iterator(_head); }
     Iterator end() { return Iterator(nullptr); }
 
+    Iterator begin() const { return Iterator(_head); }
+    Iterator end() const { return Iterator(nullptr); }
+
 };
 
 template<class T>
@@ -128,6 +136,9 @@ T& List<T>::back() {
 
 template<class T>
 bool List<T>::is_empty() { return _head == nullptr; }
+
+template<class T>
+bool List<T>::is_empty() const { return _head == nullptr; }
 
 template<class T>
 void List<T>::push_front(const T& value) {

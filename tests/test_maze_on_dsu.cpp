@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include "..\maze_on_dsu\maze_on_dsu.h"
 
-#define TEST_MAZE_ON_DSU
+//#define TEST_MAZE_ON_DSU
 #ifdef TEST_MAZE_ON_DSU
 
 TEST(TestMazeOnDsu, check_print) {

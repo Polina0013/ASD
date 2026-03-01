@@ -35,6 +35,9 @@ add_subdirectory(lib_unsorted_table_on_vector)    # подключаем доп�
 add_subdirectory(lib_unsorted_table_on_list)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_unsorted_table_on_list
 add_subdirectory(lib_sorted_table_on_vector)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_sorted_table_on_vector
 
+add_subdirectory(lib_monom)                       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_monom
+add_subdirectory(lib_polynom)                     # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_polynom
+
 add_subdirectory(main)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)              # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
