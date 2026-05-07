@@ -76,7 +76,7 @@ TEST(TestUnsortedTableOnList, the_exception_is_when_the_key_is_not_found) {
     t1.insert("r567", "where");
     t1.insert("r974", "when");
 
-    std::cout << t1;
+    //std::cout << t1;
 
     ASSERT_ANY_THROW(t1.find("r1024"));
 }

@@ -66,7 +66,16 @@ TEST(TestSortedTableOnVector, check_the_table_for_sorting) {
 
     //std::cout << t1;
 
-    EXPECT_EQ(t1.find("pos3"), "Third");
+    std::string& p1 = t1.find("pos1");
+    std::string& p2 = t1.find("pos2");
+    std::string& p3 = t1.find("pos3");
+
+    //std::cout << &p1 << " " << &p2 << " " << &p3;
+
+    EXPECT_TRUE(&p1 < &p2);
+    EXPECT_TRUE(&p2 < &p3);
+
+    //EXPECT_EQ(t1.find("pos3"), "Third");
 }
 
 TEST(TestSortedTableOnVector, check_the_key_find) {
