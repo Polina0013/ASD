@@ -31,12 +31,39 @@ add_subdirectory(maze_on_dsu)                     # подключаем доп�
 
 add_subdirectory(lib_itable)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_itable
 add_subdirectory(lib_table)                       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_table
+
 add_subdirectory(lib_unsorted_table_on_vector)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_unsorted_table_on_vector
 add_subdirectory(lib_unsorted_table_on_list)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_unsorted_table_on_list
 add_subdirectory(lib_sorted_table_on_vector)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_sorted_table_on_vector
 
 add_subdirectory(lib_monom)                       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_monom
 add_subdirectory(lib_polynom)                     # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_polynom
+
+add_subdirectory(lib_binary_tree)                 # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_binary_tree
+add_subdirectory(lib_binary_search_tree)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_binary_search_tree
+
+add_subdirectory(lib_unsorted_table_on_binary_tree)        # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_unsorted_table_on_binary_tree
+add_subdirectory(lib_sorted_table_on_binary_search_tree)   # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_sorted_table_on_binary_search_tree
+
+add_subdirectory(lib_avl_tree)                    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_avl_tree
+add_subdirectory(lib_sorted_table_on_avl_tree)    # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_sorted_table_on_avl_tree
+
+add_subdirectory(lib_heap_on_vector)              # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_heap_on_vector
+add_subdirectory(lib_priority_queue)              # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_priority_queue
+
+add_subdirectory(lib_hash_table)                  # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_hash_table
+add_subdirectory(lib_chained_hash_table)          # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_chained_hash_table
+
+add_subdirectory(lib_graph)                       # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_graph
+add_subdirectory(lib_graph_adjacency_matrix)      # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_graph_adjacency_matrix
+add_subdirectory(dijkstras_algorithm_with_vector) # подключаем дополнительный CMakeLists.txt из подкаталога с именем dijkstras_algorithm_with_vector
+
+add_subdirectory(maze_with_path)                  # подключаем дополнительный CMakeLists.txt из подкаталога с именем maze_with_path
+
+
+
+
+
 
 add_subdirectory(main)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
