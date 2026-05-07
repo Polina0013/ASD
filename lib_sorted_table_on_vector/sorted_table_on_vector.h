@@ -8,6 +8,11 @@
 #include "..\lib_table\table.h"
 #include "..\lib_tvector\tvector.h"
 
+struct SearchResult {
+    int position;
+    bool found;
+};
+
 template <class TKey, class TValue>
 class SortedTableOnVector : public Table<TKey, TValue> {
     TVector <std::pair <TKey, TValue>> _rows;
@@ -23,8 +28,11 @@ public:
 
     bool is_empty() const noexcept override;
     void print(std::ostream& out) const override;
-};
 
+private:
+    SearchResult binary_search(const TKey& key) const;
+};
+/*
 template <class TKey, class TValue>
 void SortedTableOnVector<TKey, TValue>::insert(const TKey& key, const TValue& value) {
     int left = 0;
@@ -101,6 +109,45 @@ const TValue& SortedTableOnVector<TKey, TValue>::find(const TKey& key) const {
     }
 
     throw std::logic_error("Key not found!");
+}*/
+
+template <class TKey, class TValue>
+void SortedTableOnVector<TKey, TValue>::insert(const TKey& key, const TValue& value) {
+    if (_rows.is_empty()) {
+        _rows.insert(0, std::make_pair(key, value));
+        return;
+    }
+
+    SearchResult result = binary_search(key);
+
+    if (result.found) throw std::logic_error("The key is not unique!");
+    else _rows.insert(result.position, std::make_pair(key, value));
+}
+
+template <class TKey, class TValue>
+void SortedTableOnVector<TKey, TValue>::erase(const TKey& key) {
+    SearchResult result = binary_search(key);
+
+    if (result.found) _rows.erase(result.position);
+    else throw std::logic_error("Key not found for erase!");
+}
+
+template <class TKey, class TValue>
+TValue& SortedTableOnVector<TKey, TValue>::find(const TKey& key) {
+    SearchResult result = binary_search(key);
+
+    if (result.found) return _rows[result.position].second;
+
+    throw std::logic_error("Key not found!");
+}
+
+template <class TKey, class TValue>
+const TValue& SortedTableOnVector<TKey, TValue>::find(const TKey& key) const {
+    SearchResult result = binary_search(key);
+
+    if (result.found) return _rows[result.position].second;
+
+    throw std::logic_error("Key not found!");
 }
 
 template <class TKey, class TValue>
@@ -114,4 +161,27 @@ void SortedTableOnVector<TKey, TValue>::print(std::ostream& out) const {
     for (int i = 0; i < _rows.size(); i++) {
         out << "| " << _rows[i].first << " | " << _rows[i].second << " |\n";
     }
+}
+
+template <class TKey, class TValue>
+SearchResult SortedTableOnVector<TKey, TValue>::binary_search(const TKey& key) const {
+    int left = 0;
+    int right = _rows.size() - 1;
+
+    while (left <= right) {
+        int middle = left + (right - left) / 2;
+
+        if (_rows[middle].first == key) {
+            return { middle, true };
+        }
+        else if (_rows[middle].first < key) {
+            left = middle + 1;
+        }
+        else {
+            right = middle - 1;
+        }
+    }
+
+    // left - позиция для вставки (индекс, куда нужно вставить новый элемент)
+    return { left, false };
 }
