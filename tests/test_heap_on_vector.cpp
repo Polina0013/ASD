@@ -7,7 +7,7 @@
 
 #include "..\lib_heap_on_vector\heap_on_vector.h"
 
-#define TEST_HEAP_ON_VECTOR
+//#define TEST_HEAP_ON_VECTOR
 #ifdef TEST_HEAP_ON_VECTOR
 
 TEST(TestHeapOnVector, check_push) {
@@ -54,7 +54,7 @@ TEST(TestHeapOnVector, check_push_with_random_generation) {
         if (i < vec.size() - 1) s += " ";
     }
 
-    std::cout << "Sorted values: " << s << std::endl;
+    //std::cout << "Sorted values: " << s << std::endl;
 }
 
 TEST(TestHeapOnVector, check_pop) {

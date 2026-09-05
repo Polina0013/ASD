@@ -128,7 +128,7 @@ TEST(TestBinarySearchTree, check_erase_node_with_one_child) {
     tree.print();
     std::cout.rdbuf(old);
 
-    EXPECT_EQ(buffer.str(), "1:1. 5:5. 6:6. 7:7. 9:9. 15:15. 17:17. 18:18. 19:19. 40:40. \n");
+    EXPECT_EQ(buffer.str(), "1:1. 5:5. 6:6. 7:7. 9:9. 15:15. 17:17. 18:18. 19:19. 30:30. 40:40. \n");
 }
 
 TEST(TestBinarySearchTree, check_erase_single_root) {

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#define STANDARD_SIZE 15
+#define STANDARD_SIZE 1000000
 
 template<class T>
 class Queue {

@@ -41,6 +41,7 @@ public:
 
     HashTableA();
     HashTableA(size_t size);
+    HashTableA(size_t size, size_t shift);
 
     void insert(const std::string& key, const TValue& value) override;
     void erase(const std::string& key) override;
@@ -59,9 +60,19 @@ private:
     int find_key_index(const std::string& key) const;
 };
 
+//template <class TValue>
+//bool HashTableA<TValue>::are_coprime(int a, int b) {
+//    return std::gcd(a, b) == 1;
+//}
+
 template <class TValue>
 bool HashTableA<TValue>::are_coprime(int a, int b) {
-    return std::gcd(a, b) == 1;
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a == 1;
 }
 
 template <class TValue>
@@ -80,6 +91,11 @@ HashTableA<TValue>::HashTableA(size_t size) : _size(size), _count(0), _shift(3) 
 }
 
 template <class TValue>
+HashTableA<TValue>::HashTableA(size_t size, size_t shift) : _size(size), _count(0), _shift(shift) {
+    for (size_t i = 0; i < _size; i++) _rows.push_back(HashData<TValue>());
+}
+
+template <class TValue>
 bool HashTableA<TValue>::is_empty() const noexcept {
     return _count == 0;
 }
@@ -91,24 +107,118 @@ bool HashTableA<TValue>::is_full() const noexcept {
 
 template <class TValue>
 void HashTableA<TValue>::insert(const std::string& key, const TValue& value) {
-    if (is_full()) throw std::logic_error("Hash table is full!");
+    if (is_full())
+        throw std::logic_error("Hash table is full!");
 
     size_t hash = h(key);
-    //size_t first_hash = hash;
+    size_t first_hash = hash;
+    int first_deleted = -1;
 
-    while (1) {
-        if (_rows[hash]._state != busy_) {
+    while (true) {
+        if (_rows[hash]._state == busy_) {
+            if (_rows[hash]._key == key)
+                throw std::logic_error("Key already exists!");
+        }
+        else if (_rows[hash]._state == empty_) {
+            // Вставляем в пустую ячейку
             _rows[hash] = HashData<TValue>(key, value);
             _count++;
             return;
         }
-        if (_rows[hash]._key == key) throw std::logic_error("Key already exist!");
+        else { // state == deleted_
+            if (first_deleted == -1)
+                first_deleted = static_cast<int>(hash);
+        }
 
         hash = hh(hash);
-        //if (hash == first_hash) break;
+        if (hash == first_hash)
+            break; // полный цикл пробирования завершён
     }
-    //throw std::logic_error("Hash table is full!");
+
+    // Если пустая не найдена, но была удалённая — используем её
+    if (first_deleted != -1) {
+        _rows[first_deleted] = HashData<TValue>(key, value);
+        _count++;
+        return;
+    }
+
+    // Теоретически сюда не должны попасть, так как is_full() уже проверил наличие свободного места
+    throw std::logic_error("No available slot (should not happen)");
 }
+
+//template <class TValue>
+//void HashTableA<TValue>::insert(const std::string& key, const TValue& value) {
+//    if (is_full()) throw std::logic_error("Hash table is full!");
+//
+//    size_t hash = h(key);
+//    //size_t first_hash = hash;
+//    bool has_deleted = false;
+//    int idx_deleted = -1;
+//
+//    while (1) {
+//        if (_rows[hash]._state != busy_) {
+//            if (_rows[hash]._state == empty_) {
+//                if (has_deleted) {
+//                    hash = idx_deleted;
+//                }
+//                _rows[hash] = HashData<TValue>(key, value);
+//                _count++;
+//                return;
+//            }
+//            else {
+//                if (has_deleted == false) {
+//                    has_deleted = true;
+//                    idx_deleted = hash;
+//                }
+//            }
+//
+//        }
+//        if (_rows[hash]._state != deleted_ &&_rows[hash]._key == key) throw std::logic_error("Key already exist!");
+//
+//        hash = hh(hash);
+//        //if (hash == first_hash) break;
+//    }
+//    //throw std::logic_error("Hash table is full!");
+//}
+
+//template <class TValue>
+//void HashTableA<TValue>::insert(const std::string& key, const TValue& value) {
+//    if (_count >= _size) throw std::logic_error("Hash table is full (no empty slots)");
+//
+//    size_t hash = h(key);
+//    size_t first_hash = hash;
+//    int first_deleted = -1;
+//
+//    while (true) {
+//        if (_rows[hash]._state == busy_) {
+//            if (_rows[hash]._key == key)
+//                throw std::logic_error("Key already exists");
+//        }
+//        else if (_rows[hash]._state == empty_) {
+//            // вставляем в первую встречную пустую или удалённую?
+//            if (first_deleted != -1)
+//                hash = first_deleted; // используем ранее встреченную удалённую
+//            _rows[hash] = HashData<TValue>(key, value);
+//            _count++;
+//            return;
+//        }
+//        else { // deleted_
+//            if (first_deleted == -1)
+//                first_deleted = static_cast<int>(hash);
+//        }
+//
+//        hash = hh(hash);
+//        if (hash == first_hash) {
+//            // если вернулись в начало, и нет empty_, но есть deleted_ – используем first_deleted
+//            if (first_deleted != -1) {
+//                _rows[first_deleted] = HashData<TValue>(key, value);
+//                _count++;
+//                return;
+//            }
+//            throw std::logic_error("No empty slot");
+//        }
+//    }
+//}
 
 template <class TValue>
 void HashTableA<TValue>::erase(const std::string& key) {

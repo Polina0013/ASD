@@ -95,9 +95,15 @@ void AVLTree<TKey, TValue>::insert(const TKey& key, const TValue& value) {
     if (inserted_node == nullptr) throw std::logic_error("Key already exists!");
 
     AVLNode<TKey, TValue>* current = inserted_node->parent;
+    bool is_fix = false;
+
+    
+
     while (current) {
         recalc_height(current);
-        current = recover_balance(current);
+        if (!is_fix) current = recover_balance(current);
+        else current = current->parent;
+        
     }
 }
 
@@ -114,7 +120,7 @@ void AVLTree<TKey, TValue>::erase(const TKey& key) {
     AVLNode<TKey, TValue>* current = erase_BST(key);
 
     while (current) {
-        recalc_height(current);
+        //recalc_height(current);
         current = recover_balance(current);
     }
 

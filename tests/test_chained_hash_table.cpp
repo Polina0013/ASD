@@ -39,6 +39,20 @@ TEST(TestChainedHashTable, check_merging_dictionaries) {
     //hash_table.print(std::cout);
 }
 
+TEST(TestChainedHashTable, check_for_a_collision) {
+    HashTableC<int> t1(20);
+
+    t1.insert("cat", 0);
+    t1.insert("cta", 1);
+    t1.insert("tca", 2);
+    t1.insert("tac", 3);
+    t1.insert("act", 4);
+    t1.insert("atc", 5);
+
+    std::cout << t1;
+
+    EXPECT_EQ(t1.find("atc"), 5);
+}
 
 TEST(TestChainedHashTable, the_exception_is_when_insert_not_a_unique_key) {
     HashTableC<int> t1(20);

@@ -60,12 +60,18 @@ add_subdirectory(dijkstras_algorithm_with_vector) # подключаем доп�
 
 add_subdirectory(maze_with_path)                  # подключаем дополнительный CMakeLists.txt из подкаталога с именем maze_with_path
 
+add_subdirectory(lib_rb_tree)                     # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_rb_tree
+add_subdirectory(lib_sorted_table_on_rb_tree)     # подключаем дополнительный CMakeLists.txt из подкаталога с именем lib_sorted_table_on_rb_tree
+
+
+
 
 
 
 
 
 add_subdirectory(main)                      # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
+add_subdirectory(experiment)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем experiment
 
 option(BTEST "build test?" ON)              # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
 
